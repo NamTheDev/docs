@@ -13,13 +13,13 @@
   <link rel="stylesheet" href="assets/config.css">
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js" defer></script>
-  <script src="assets/theme.js" defer></script>
+  <script src="assets/theme.js"></script>
   <script src="assets/site.js" defer></script>
 </head>
 <body class="bg-body fg-body">
   <a class="visually-hidden-focusable" href="#main-content">Skip to content</a>
   <header class="bg-1 border-bottom">
-    <div class="container-xl d-flex align-items-center flex-wrap gap-4 py-3">
+    <div class="container d-flex align-items-center flex-wrap gap-4 py-3">
       <a href="?page=home" class="fw-semibold text-decoration-none fg-body">NamTheDev / docs</a>
       <nav aria-label="External navigation" class="d-flex gap-4 flex-wrap ms-auto align-items-center">
         <a href="https://github.com/NamTheDev/docs">GitHub</a>
@@ -28,9 +28,9 @@
       </nav>
     </div>
   </header>
-  <div class="container-xl py-4">
+  <div class="container py-4">
     <div class="row g-4">
-      <aside class="col-lg-3">
+      <aside class="lg:col-3">
         <details id="navigation" class="border rounded-6 bg-1 p-4" open>
           <summary class="fw-semibold">Documentation</summary>
           <label for="page-filter" class="visually-hidden">Filter documentation</label>
@@ -38,7 +38,7 @@
           <nav id="page-nav" class="d-flex flex-column gap-2" aria-label="Documentation pages"></nav>
         </details>
       </aside>
-      <main id="main-content" class="col-lg-9 min-w-0" tabindex="-1">
+      <main id="main-content" class="lg:col-9 min-w-0" tabindex="-1">
         <article id="article" class="text-break" aria-live="polite">
           <p class="fg-3">Loading…</p>
         </article>

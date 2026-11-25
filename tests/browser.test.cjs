@@ -27,6 +27,11 @@ test('documentation navigation, cross-links, responsive layout and themes', asyn
     await page.goto(url);
     await page.locator('#article h1').filter({hasText:'Documentation'}).waitFor();
     assert.equal(await page.locator('#page-nav details').count(),8);
+    const desktopLayout = await page.evaluate(()=>{
+      const sidebar=document.querySelector('aside').getBoundingClientRect(), main=document.querySelector('main').getBoundingClientRect();
+      return sidebar.top === main.top && sidebar.right < main.left && sidebar.width < main.width;
+    });
+    assert.equal(desktopLayout,true);
     assert.equal(await page.locator('meta[name="color-scheme"]').count(),1);
     assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'dark');
     await page.locator('#article').getByRole('link',{name:'keep',exact:true}).click();
@@ -44,6 +49,7 @@ test('documentation navigation, cross-links, responsive layout and themes', asyn
     await page.locator('#theme-toggle').click();
     assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'dark');
     await page.setViewportSize({width:390,height:844});
+    assert.equal(await page.evaluate(()=>document.querySelector('aside').getBoundingClientRect().bottom <= document.querySelector('main').getBoundingClientRect().top),true);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     await page.locator('#navigation').evaluate(e=>e.open=true);
     await page.locator('#page-filter').fill('clipboard');
