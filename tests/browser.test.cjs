@@ -5,7 +5,7 @@ const path = require('node:path');
 const http = require('node:http');
 const { chromium } = require('playwright');
 
-test('documentation navigation, cross-links, responsive layout and themes', async () => {
+test('documentation navigation, cross-links, responsive layout and fixed dark theme', async () => {
   const mime = {'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.md':'text/plain'};
   const server = http.createServer(async(req,res)=>{
     try {
@@ -30,14 +30,15 @@ test('documentation navigation, cross-links, responsive layout and themes', asyn
     const desktopLayout = await page.evaluate(()=>{
       const sidebar=document.querySelector('aside').getBoundingClientRect(), main=document.querySelector('main').getBoundingClientRect();
       return Math.abs(sidebar.top-main.top)<=1 && sidebar.right <= main.left+1 && sidebar.width < main.width &&
-        sidebar.left===0 && Math.abs(main.right-innerWidth)<=1 && Math.abs(main.bottom-innerHeight)<=1;
+        sidebar.left===0 && Math.abs(main.right-(document.querySelector("#outline").hidden?innerWidth:document.querySelector("#outline").getBoundingClientRect().left))<=1 && Math.abs(main.bottom-innerHeight)<=1;
     });
     assert.equal(desktopLayout,true);
     assert.equal(await page.locator('main').evaluate(e=>getComputedStyle(e).overflowY),'auto');
     assert.equal(await page.locator('aside').evaluate(e=>getComputedStyle(e).overflowY),'auto');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true);
     await page.setViewportSize({width:1920,height:1080});
-    assert.equal(await page.locator('main').evaluate(e=>e.clientWidth>1400),true);
+    assert.equal(await page.locator('main').evaluate(e=>e.clientWidth>1200),true);
+    assert.equal(await page.locator('#reading-column').evaluate(e=>e.clientWidth<850),true);
     await page.setViewportSize({width:1440,height:900});
     assert.equal(await page.locator('meta[name="color-scheme"]').count(),1);
     assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'dark');
@@ -47,17 +48,20 @@ test('documentation navigation, cross-links, responsive layout and themes', asyn
     await page.locator('#article').getByRole('link',{name:'User guide',exact:true}).click();
     await page.locator('#article h1').filter({hasText:'User guide'}).waitFor();
     assert.equal(new URL(page.url()).searchParams.get('page'),'keep-usage');
-    await page.locator('#theme-toggle').click();
-    assert.equal(await page.locator('html').getAttribute('data-bs-theme'),'light');
-    assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'light');
+    assert.equal(await page.locator('#theme-toggle').count(),0);
+    await page.evaluate(()=>localStorage.setItem('namthedev-docs-theme','light'));
     await page.reload();
     await page.locator('#article h1').waitFor();
-    assert.equal(await page.locator('meta[name="color-scheme"]').getAttribute('content'),'light');
-    await page.locator('#theme-toggle').click();
+    assert.equal(await page.locator('html').getAttribute('data-bs-theme'),'dark');
     assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'dark');
+    assert.equal(await page.locator('#outline').isVisible(),true);
+    assert.ok(await page.locator('#outline-links a').count()>0);
+    assert.equal(await page.locator('#breadcrumbs').innerText(),'Docs / keep / User guide');
     await page.setViewportSize({width:390,height:844});
     assert.equal(await page.evaluate(()=>document.querySelector('aside').getBoundingClientRect().bottom <= document.querySelector('main').getBoundingClientRect().top),true);
     assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('dvh-100')),false);
+    assert.equal(await page.locator('#outline').isVisible(),false);
+    assert.equal(await page.locator('#mobile-toc').isVisible(),true);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     await page.locator('#navigation').evaluate(e=>e.open=true);
     await page.locator('#page-filter').fill('clipboard');

@@ -1,0 +1,4 @@
+/* Reading geometry not expressed by shared Bootstrap utilities. */
+#reading-column {max-width: 82ch;}
+@media (min-width: 992px) {#sidebar {width: 248px;}}
+@media (min-width: 1280px) {#outline {width: 232px;}}

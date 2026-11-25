@@ -11,7 +11,7 @@ Guests can read and copy. The owner can edit or delete items and delete the vaul
 
 ## Expiry and preferences
 
-Vaults expire after 24 hours or seven days. Settings include default expiry, theme and automatic refresh (off, 5, 15 or 30 seconds).
+Vaults expire after 24 hours or seven days. Settings include default expiry and automatic refresh (off, 5, 15 or 30 seconds).
 
 ## Privacy
 

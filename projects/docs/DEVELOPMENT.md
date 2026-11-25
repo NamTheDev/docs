@@ -30,4 +30,4 @@ The source verification workflow checks manifest paths, internal Markdown links 
 
 ## Layout
 
-The desktop site uses the full viewport, with independent scrolling for navigation and the reading pane. At the mobile breakpoint, navigation collapses above the article and the document scrolls normally. Bootstrap utilities control spacing and layout without application-specific CSS. Theme and Markdown navigation remain independent of the layout.
+The desktop site uses independently scrolling navigation and reading panes, a centered reading column, and a right-hand section outline on wide screens. On narrower screens the outline collapses above the article. Bootstrap utilities control spacing and layout; assets/docs.css contains only reading-column and sidebar geometry. The native theme is fixed dark.

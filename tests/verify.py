@@ -21,5 +21,5 @@ for path in registered:
 readme = (root / "README.md").read_text()
 assert re.findall(r"^## (.+)$", readme, re.M) == ["AI Disclaimer", "Introduction", "Resources", "License"]
 assert "NamTheDev" in (root / "LICENSE").read_text().splitlines()[2]
-assert sorted(p.name for p in (root / "assets").glob("*.css")) == ["bootstrap.min.css", "config.css"]
+assert sorted(p.name for p in (root / "assets").glob("*.css")) == ["bootstrap.min.css", "config.css", "docs.css"]
 print(f"Verified {len(pages)} Markdown pages and repository structure.")

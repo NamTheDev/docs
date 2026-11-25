@@ -9,6 +9,18 @@
   const main = document.querySelector("#main-content");
   const sidebar = document.querySelector("#sidebar");
   const workspace = document.querySelector("#workspace");
+  const wide = matchMedia("(min-width: 1280px)");
+  const outline = document.querySelector("#outline");
+  const mobileToc = document.querySelector("#mobile-toc");
+  const outlineLinks = document.querySelector("#outline-links");
+  const mobileLinks = document.querySelector("#mobile-toc-links");
+  const breadcrumbs = document.querySelector("#breadcrumbs");
+  function updateOutline() {
+    const hasSections = outlineLinks.childElementCount > 0;
+    outline.hidden = !wide.matches || !hasSections;
+    mobileToc.hidden = wide.matches || !hasSections;
+  }
+  wide.addEventListener("change", updateOutline);
   function updateLayout() {
     const desktop = !mobile.matches;
     for (const cls of ["dvh-100","overflow-hidden"]) document.body.classList.toggle(cls, desktop);
@@ -41,14 +53,14 @@
     for (const group of groups) {
       const matches = group.pages.filter(p => (group.group + " " + p.title).toLowerCase().includes(query));
       if (!matches.length) continue;
-      const details = element("details", "border-bottom pb-2");
+      const details = element("details", "pb-1");
       details.open = !!query || matches.some(p => p.slug === current) || group.group === "Documentation";
-      details.append(element("summary", "fw-semibold text-break py-2", group.group));
-      const list = element("ul", "list-unstyled m-0 ms-3 border-start ps-2");
+      details.append(element("summary", "fw-semibold text-break py-2 fg-2", group.group));
+      const list = element("ul", "list-unstyled m-0 ms-2 ps-2");
       for (const page of matches) {
         const item = element("li");
         const active = page.slug === current;
-        const a = element("a", "d-block text-decoration-none rounded-5 py-2 px-3 text-break " + (active ? "bg-2 fg-primary fw-semibold" : "fg-2"), page.title);
+        const a = element("a", "d-block text-decoration-none rounded-5 py-1 px-3 text-break " + (active ? "bg-2 fg-primary fw-semibold" : "fg-2"), page.title);
         a.href = pageUrl(page.slug);
         if (active) a.setAttribute("aria-current", "page");
         item.append(a); list.append(item);
@@ -69,36 +81,33 @@
     }
   }
   function formatArticle() {
-    const used = new Set(["main-content","article","navigation","page-nav","page-filter","theme-toggle"]);
+    const used = new Set(["main-content","article","navigation","page-nav","page-filter","outline","mobile-toc","breadcrumbs","reading-column","outline-links","mobile-toc-links"]);
     const headings = Array.from(article.querySelectorAll("h2,h3,h4,h5,h6"));
     for (const heading of article.querySelectorAll("h1,h2,h3,h4,h5,h6")) {
       const base = heading.textContent.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu,"").replace(/\s+/g,"-") || "section";
       let id = base, i = 2; while (used.has(id)) id = base + "-" + i++;
       used.add(id); heading.id = id;
       heading.classList.add("text-break", "fw-semibold", "mt-4", "mb-3");
-      if (heading.tagName === "H1") heading.classList.add("fg-primary","border-bottom","pb-3");
+      if (heading.tagName === "H1") { heading.classList.remove("mt-4"); heading.classList.add("fg-body","fs-2xl","mb-4"); }
+      else if (heading.tagName === "H2") heading.classList.add("fs-xl","border-bottom","pb-2");
+      else heading.classList.add("fs-lg");
     }
     for (const table of article.querySelectorAll("table")) {
-      table.classList.add("table","table-bordered","fs-sm");
+      table.classList.add("table","table-bordered","fs-sm","align-middle");
       const wrapper = element("div","overflow-auto my-3");
       table.before(wrapper); wrapper.append(table);
     }
-    for (const pre of article.querySelectorAll("pre")) pre.classList.add("bg-1","border","rounded-5","p-3","overflow-auto");
+    for (const pre of article.querySelectorAll("pre")) pre.classList.add("bg-1","border","rounded-6","p-4","overflow-auto");
     for (const img of article.querySelectorAll("img")) { img.classList.add("img-fluid"); img.loading = "lazy"; }
     for (const quote of article.querySelectorAll("blockquote")) quote.classList.add("bg-1","border-start","p-3","rounded-5");
-    if (headings.length) {
-      const contents = element("details","bg-1 border rounded-6 p-3 my-4");
-      contents.open = true;
-      contents.append(element("summary","fw-semibold","Contents"));
-      const list = element("ul","list-unstyled mb-0 mt-2");
-      for (const heading of headings) {
-        const row = element("li",heading.tagName==="H2"?"":"ms-3");
-        const a = element("a","d-block py-1 text-break",heading.textContent);
-        a.href = "#" + heading.id; row.append(a); list.append(row);
-      }
-      contents.append(list);
-      article.querySelector("h1")?.after(contents);
+    outlineLinks.replaceChildren(); mobileLinks.replaceChildren();
+    for (const heading of headings) {
+      const a = element("a", "d-block text-decoration-none py-1 text-break fg-2" + (heading.tagName==="H2"?"":" ms-3"), heading.textContent);
+      a.href = "#" + heading.id;
+      outlineLinks.append(a); mobileLinks.append(a.cloneNode(true));
     }
+    mobileToc.open = false;
+    updateOutline();
   }
   async function markdown(file) {
     if (!cache.has(file)) {
@@ -112,6 +121,12 @@
     const page = pages.find(p => p.slug === slug) || pages[0];
     if (!page) return;
     const token = ++version; current = page.slug; renderNav();
+    const group = groups.find(g=>g.pages.includes(page));
+    breadcrumbs.replaceChildren();
+    const home = element("a","text-decoration-none","Docs"); home.href=pageUrl("home");
+    breadcrumbs.append(home);
+    if(page.slug!=="home") breadcrumbs.append(document.createTextNode(" / "+group.group+" / "+page.title));
+    outlineLinks.replaceChildren(); mobileLinks.replaceChildren(); updateOutline();
     article.replaceChildren(element("p","fg-3","Loading…"));
     try {
       const source = await markdown(page.file);

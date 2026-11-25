@@ -16,8 +16,7 @@ Use native HTML and existing utilities before creating selectors or inline style
 
 | Role | Standard |
 | --- | --- |
-| Default theme | Catppuccin Mocha |
-| Light theme | Catppuccin Latte |
+| Theme | Catppuccin Mocha (dark only) |
 | Accent | Lavender |
 | UI font | Roboto |
 | Base size | 14px |
@@ -28,18 +27,18 @@ Use native HTML and existing utilities before creating selectors or inline style
 | Cards | rounded-6 (10px) |
 | Dialogs | rounded-7 (12px) |
 
-Theme-aware semantic tokens keep color usage consistent. Use accessible labels, visible focus, responsive layout and meaningful status colors. Fixed-theme sites do not require a switch merely to signal their theme.
+Theme-aware semantic tokens keep color usage consistent. Use accessible labels, visible focus, responsive layout and meaningful status colors. Active apps use a fixed dark theme without appearance switches.
 
 ## Native theme signaling
 
-Declare one matching color-scheme meta tag, set the root CSS color-scheme and Bootstrap data-bs-theme, and update them together when switching themes. Do not use darkreader-lock by default.
+Declare one matching color-scheme meta tag, set the root CSS color-scheme and Bootstrap data-bs-theme, with dark values. Do not use darkreader-lock by default.
 
 See the canonical [Design principles](https://github.com/NamTheDev/util/blob/main/design/DESIGN_PRINCIPLES.md) and [Theme signaling specification](https://github.com/NamTheDev/util/blob/main/formatting/THEME_SIGNAL.md).
 
 ## Source references
 
-Reviewed against [util source](https://github.com/NamTheDev/util/tree/7b79f69ab7158afd7f8f74be02164ff27d188e29).
+Reviewed against [util source](https://github.com/NamTheDev/util/tree/4a27d54fd523d768c4be3d0b352265648df53616).
 
-- [design/DESIGN_PRINCIPLES.md](https://github.com/NamTheDev/util/blob/7b79f69ab7158afd7f8f74be02164ff27d188e29/design/DESIGN_PRINCIPLES.md)
-- [design/config.css](https://github.com/NamTheDev/util/blob/7b79f69ab7158afd7f8f74be02164ff27d188e29/design/config.css)
-- [formatting/THEME_SIGNAL.md](https://github.com/NamTheDev/util/blob/7b79f69ab7158afd7f8f74be02164ff27d188e29/formatting/THEME_SIGNAL.md)
+- [design/DESIGN_PRINCIPLES.md](https://github.com/NamTheDev/util/blob/4a27d54fd523d768c4be3d0b352265648df53616/design/DESIGN_PRINCIPLES.md)
+- [design/config.css](https://github.com/NamTheDev/util/blob/4a27d54fd523d768c4be3d0b352265648df53616/design/config.css)
+- [formatting/THEME_SIGNAL.md](https://github.com/NamTheDev/util/blob/4a27d54fd523d768c4be3d0b352265648df53616/formatting/THEME_SIGNAL.md)

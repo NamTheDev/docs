@@ -13,31 +13,33 @@
   <link rel="stylesheet" href="assets/config.css">
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js" defer></script>
-  <script src="assets/theme.js"></script>
+  <link rel="stylesheet" href="assets/docs.css">
   <script src="assets/site.js" defer></script>
 </head>
 <body class="bg-body fg-body d-flex flex-column min-dvh-100">
   <a class="visually-hidden-focusable" href="#main-content">Skip to content</a>
   <header class="bg-1 border-bottom flex-shrink-0">
-    <div class="w-100 px-4 d-flex align-items-center flex-wrap gap-4 py-3">
-      <a href="?page=home" class="fw-semibold text-decoration-none fg-body">NamTheDev / docs</a>
+    <div class="w-100 px-4 d-flex align-items-center flex-wrap gap-3 py-3">
+      <a href="?page=home" class="fw-semibold text-decoration-none fg-body">NamTheDev <span class="fg-3 fw-normal">/ docs</span></a>
       <nav aria-label="External navigation" class="d-flex gap-4 flex-wrap ms-auto align-items-center">
         <a href="https://github.com/NamTheDev/docs">GitHub</a>
         <a href="https://namthedev.github.io/profile/">Profile</a>
-        <button class="btn btn-outline theme-secondary rounded-5 btn-sm" id="theme-toggle" type="button" aria-pressed="false">Light mode</button>
       </nav>
     </div>
   </header>
   <div id="workspace" class="d-flex flex-column lg:flex-row flex-grow-1 min-h-0 w-100">
-      <aside id="sidebar" class="bg-1 lg:col-3 xl:col-2 min-h-0 min-w-0">
+      <aside id="sidebar" class="bg-1 min-h-0 min-w-0 flex-shrink-0">
         <details id="navigation" class="p-4" open>
-          <summary class="fw-semibold">Documentation</summary>
+          <summary class="fw-semibold">Browse docs</summary>
           <label for="page-filter" class="visually-hidden">Filter documentation</label>
-          <input id="page-filter" type="search" class="form-control rounded-5 my-3" placeholder="Filter pages" autocomplete="off">
-          <nav id="page-nav" class="d-flex flex-column gap-2" aria-label="Documentation pages"></nav>
+          <input id="page-filter" type="search" class="form-control rounded-5 my-3" placeholder="Find a page…" autocomplete="off">
+          <nav id="page-nav" class="d-flex flex-column gap-1" aria-label="Documentation pages"></nav>
         </details>
       </aside>
-      <main id="main-content" class="flex-fill min-w-0 min-h-0 px-4 lg:px-6 py-3" tabindex="-1">
+      <main id="main-content" class="flex-fill min-w-0 min-h-0 px-4 lg:px-6 py-4" tabindex="-1">
+        <div id="reading-column" class="mx-auto min-w-0">
+        <nav id="breadcrumbs" aria-label="Breadcrumb" class="fg-3 fs-sm mb-3"></nav>
+        <details id="mobile-toc" class="border rounded-6 p-3 mb-4" hidden><summary class="fw-semibold">On this page</summary><nav id="mobile-toc-links" aria-label="Sections"></nav></details>
         <article id="article" class="text-break" aria-live="polite">
           <p class="fg-3">Loading…</p>
         </article>
@@ -47,7 +49,12 @@
           · <a href="https://github.com/NamTheDev/docs/blob/main/AI_DISCLAIMER.md">AI disclosure</a>
           · <a href="https://github.com/NamTheDev/util">util</a>
         </footer>
+        </div>
       </main>
+      <aside id="outline" class="min-w-0 flex-shrink-0 border-start p-4 overflow-auto" aria-label="On this page" hidden>
+        <p class="fw-semibold mb-3">On this page</p>
+        <nav id="outline-links" class="d-flex flex-column gap-1" aria-label="Sections"></nav>
+      </aside>
   </div>
 </body>
 </html>

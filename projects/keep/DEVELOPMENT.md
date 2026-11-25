@@ -27,7 +27,7 @@ The production output is published by GitHub Pages Actions; the Bun server is fo
 
 ## Maintenance
 
-Keep the existing storage keys and migration path stable. Do not make pure note helpers depend on the UI coordinator. Test editing, checklist updates, labels, archive/trash, search, backups, keyboard shortcuts, theme persistence and responsive navigation. The UI uses the shared Bootstrap 6/Catppuccin design; consult [util](../util/README.md) before changing tokens or styles.
+Keep the existing storage keys and migration path stable. Do not make pure note helpers depend on the UI coordinator. Test editing, checklist updates, labels, archive/trash, search, backups, keyboard shortcuts, fixed dark theme and responsive navigation. The UI uses the shared Bootstrap 6/Catppuccin design; consult [util](../util/README.md) before changing tokens or styles.
 
 ## Source references
 
