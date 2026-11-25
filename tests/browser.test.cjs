@@ -43,11 +43,11 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
       await page.setViewportSize({width,height:900});
       await page.mouse.move(0,899);
       await page.waitForFunction(()=>{
-        const n=document.querySelector('.header-links'), g=n.querySelector('.marquee-group');
+        const n=document.querySelector('.header-links'), g=n.querySelector('.marquee-group:not([aria-hidden])');
         return n.scrollWidth-n.clientWidth >= Math.round(g.getBoundingClientRect().width)-1;
       });
       const geometry=await ticker.evaluate(n=>{
-        const g=n.querySelector('.marquee-group'), items=[...g.children];
+        const g=n.querySelector('.marquee-group:not([aria-hidden])'), items=[...g.children];
         const brand=document.querySelector('.brand-name').getBoundingClientRect();
         const box=n.getBoundingClientRect();
         return {
@@ -59,32 +59,57 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
       });
       assert.ok(geometry.gap>=8 && geometry.endGap>=8,JSON.stringify(geometry));
       assert.ok(geometry.clipped && geometry.noOverflow,JSON.stringify(geometry));
-      const before=await ticker.evaluate(n=>({x:n.scrollLeft,cycle:Math.round(n.querySelector('.marquee-group').getBoundingClientRect().width)}));
+      const before=await ticker.evaluate(n=>({x:n.scrollLeft,cycle:n.querySelector('.marquee-group:not([aria-hidden])').getBoundingClientRect().width}));
       await page.waitForFunction(({x,cycle})=>{
         const n=document.querySelector('.header-links');
         return (n.scrollLeft-x+cycle)%cycle>=18;
       },before,{timeout:4000});
     }
     await page.setViewportSize({width:1440,height:900});
+    // Hover pauses auto-scroll, but wheel input still wraps both ways.
     await ticker.hover();
-    const pausedAt=await ticker.evaluate(n=>n.scrollLeft);
-    await page.waitForTimeout(300);
-    assert.equal(await ticker.evaluate(n=>n.scrollLeft),pausedAt);
-    // Force the seam and ensure automatic movement wraps rather than stalling.
-    const cycle=await ticker.evaluate(n=>{
-      const w=Math.round(n.querySelector('.marquee-group').getBoundingClientRect().width);
-      n.scrollLeft=w-12; return w;
-    });
+    const cycle = await ticker.evaluate(n=>n.querySelector('.marquee-group:not([aria-hidden])').getBoundingClientRect().width);
+    const phase = x=>((x%cycle)+cycle)%cycle;
+    const closePhase = (a,b)=>Math.min(phase(a-b),phase(b-a))<3;
+    await ticker.evaluate((n,w)=>{n.scrollLeft=w+12;},cycle);
+    for (const delta of [-40, Math.round(cycle*3+75), -Math.round(cycle*4+100), 120]) {
+      const before = await ticker.evaluate(n=>n.scrollLeft);
+      await page.mouse.wheel(delta,0);
+      await page.waitForFunction(({before,delta,w})=>{
+        const n=document.querySelector('.header-links'), mod=x=>((x%w)+w)%w;
+        return Math.min(mod(n.scrollLeft-before-delta),mod(before+delta-n.scrollLeft))<3 &&
+          n.scrollLeft>=w-2 && n.scrollLeft<2*w+2;
+      },{before,delta,w:cycle});
+      const after=await ticker.evaluate(n=>n.scrollLeft);
+      assert.ok(closePhase(after,before+delta));
+      assert.ok(Math.abs(after-before)>5);
+    }
+    const held=await ticker.evaluate(n=>n.scrollLeft);
+    await page.waitForTimeout(250);
+    assert.equal(await ticker.evaluate(n=>n.scrollLeft),held);
+    // Native scrolling has physical buffers at both ends.
+    for(const side of ['start','end']){
+      await ticker.evaluate((n,s)=>{n.scrollLeft=s==='start'?0:n.scrollWidth-n.clientWidth;},side);
+      await page.waitForFunction(w=>{
+        const x=document.querySelector('.header-links').scrollLeft;
+        return x>=w-2 && x<2*w+2;
+      },cycle);
+    }
     await page.mouse.move(0,899);
-    await page.waitForFunction(w=>document.querySelector('.header-links').scrollLeft<w-100,cycle,{timeout:4000});
+    const resumed=await ticker.evaluate(n=>n.scrollLeft);
+    await page.waitForFunction(({x,w})=>((document.querySelector('.header-links').scrollLeft-x)%w+w)%w>12,{x:resumed,w:cycle},{timeout:3000});
     await page.emulateMedia({reducedMotion:'reduce'});
-    await ticker.locator('.marquee-group[aria-hidden="true"]').first().waitFor({state:'hidden'});
-    const reducedAt=await ticker.evaluate(n=>n.scrollLeft);
-    await page.waitForTimeout(300);
-    assert.equal(await ticker.evaluate(n=>n.scrollLeft),reducedAt);
+    await page.waitForTimeout(100);
+    const still=await ticker.evaluate(n=>n.scrollLeft);
+    await page.waitForTimeout(250);
+    assert.equal(await ticker.evaluate(n=>n.scrollLeft),still);
+    await ticker.hover();
+    await page.mouse.wheel(-Math.round(cycle*2+70),0);
+    await page.waitForFunction(({x,w})=>Math.abs(document.querySelector('.header-links').scrollLeft-x)>10,{x:still,w:cycle});
     assert.equal(await original.locator('a').count(),11);
+    assert.equal(await ticker.locator('.marquee-group[aria-hidden="true"] a:not([tabindex="-1"])').count(),0);
+    await page.mouse.move(0,899);
     await page.emulateMedia({reducedMotion:'no-preference'});
-    await page.setViewportSize({width:1440,height:900});
     const fullscreen = () => page.evaluate(()=>{
       const main=document.querySelector('main').getBoundingClientRect();
       const workspace=document.querySelector('#workspace').getBoundingClientRect();
