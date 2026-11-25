@@ -27,3 +27,7 @@ Open http://localhost:8000. The website fetches only registered Markdown pages a
 The GitHub Pages workflow deploys the static site. In repository Settings → Pages, select GitHub Actions as the source if Pages has not yet been enabled.
 
 The source verification workflow checks manifest paths, internal Markdown links and JavaScript syntax. Browser checks verify navigation, theme signaling and responsive layout. Keep the design configuration identical to util and do not add unnecessary custom CSS.
+
+## Layout
+
+The desktop site uses the full viewport, with independent scrolling for navigation and the reading pane. At the mobile breakpoint, navigation collapses above the article and the document scrolls normally. Bootstrap utilities control spacing and layout without application-specific CSS. Theme and Markdown navigation remain independent of the layout.

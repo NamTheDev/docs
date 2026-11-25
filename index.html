@@ -16,10 +16,10 @@
   <script src="assets/theme.js"></script>
   <script src="assets/site.js" defer></script>
 </head>
-<body class="bg-body fg-body">
+<body class="bg-body fg-body d-flex flex-column min-dvh-100">
   <a class="visually-hidden-focusable" href="#main-content">Skip to content</a>
-  <header class="bg-1 border-bottom">
-    <div class="container d-flex align-items-center flex-wrap gap-4 py-3">
+  <header class="bg-1 border-bottom flex-shrink-0">
+    <div class="w-100 px-4 d-flex align-items-center flex-wrap gap-4 py-3">
       <a href="?page=home" class="fw-semibold text-decoration-none fg-body">NamTheDev / docs</a>
       <nav aria-label="External navigation" class="d-flex gap-4 flex-wrap ms-auto align-items-center">
         <a href="https://github.com/NamTheDev/docs">GitHub</a>
@@ -28,17 +28,16 @@
       </nav>
     </div>
   </header>
-  <div class="container py-4">
-    <div class="row g-4">
-      <aside class="lg:col-3">
-        <details id="navigation" class="border rounded-6 bg-1 p-4" open>
+  <div id="workspace" class="d-flex flex-column lg:flex-row flex-grow-1 min-h-0 w-100">
+      <aside id="sidebar" class="bg-1 lg:col-3 xl:col-2 min-h-0 min-w-0">
+        <details id="navigation" class="p-4" open>
           <summary class="fw-semibold">Documentation</summary>
           <label for="page-filter" class="visually-hidden">Filter documentation</label>
           <input id="page-filter" type="search" class="form-control rounded-5 my-3" placeholder="Filter pages" autocomplete="off">
           <nav id="page-nav" class="d-flex flex-column gap-2" aria-label="Documentation pages"></nav>
         </details>
       </aside>
-      <main id="main-content" class="lg:col-9 min-w-0" tabindex="-1">
+      <main id="main-content" class="flex-fill min-w-0 min-h-0 px-4 lg:px-6 py-3" tabindex="-1">
         <article id="article" class="text-break" aria-live="polite">
           <p class="fg-3">Loading…</p>
         </article>
@@ -49,7 +48,6 @@
           · <a href="https://github.com/NamTheDev/util">util</a>
         </footer>
       </main>
-    </div>
   </div>
 </body>
 </html>

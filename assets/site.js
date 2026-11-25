@@ -6,6 +6,21 @@
   const navigation = document.querySelector("#navigation");
   const root = new URL("./", location.href);
   const mobile = matchMedia("(max-width: 991.98px)");
+  const main = document.querySelector("#main-content");
+  const sidebar = document.querySelector("#sidebar");
+  const workspace = document.querySelector("#workspace");
+  function updateLayout() {
+    const desktop = !mobile.matches;
+    for (const cls of ["dvh-100","overflow-hidden"]) document.body.classList.toggle(cls, desktop);
+    workspace.classList.toggle("overflow-hidden", desktop);
+    sidebar.classList.toggle("overflow-auto", desktop);
+    sidebar.classList.toggle("border-end", desktop);
+    sidebar.classList.toggle("border-bottom", !desktop);
+    main.classList.toggle("overflow-auto", desktop);
+    navigation.open = desktop;
+  }
+  mobile.addEventListener("change", updateLayout);
+  updateLayout();
   const cache = new Map();
   let groups = [], pages = [], current = "", version = 0;
   const element = (tag, classes, text) => {
@@ -106,7 +121,10 @@
       document.title = page.title + " — " + groups.find(g => g.pages.includes(page)).group + " | NamTheDev docs";
       if (hash) {
         try { document.getElementById(decodeURIComponent(hash.replace(/^#/,"")))?.scrollIntoView(); } catch {}
-      } else window.scrollTo(0,0);
+      } else {
+        main.scrollTop = 0;
+        window.scrollTo(0,0);
+      }
     } catch (err) {
       if (token !== version) return;
       const message = element("p","fg-danger","Unable to load this document. ");
@@ -130,7 +148,6 @@
   });
   filter.addEventListener("input",renderNav);
   addEventListener("popstate",route);
-  if (mobile.matches) navigation.open = false;
   fetch(new URL("manifest.json",root),{cache:"no-cache"}).then(r=>{if(!r.ok)throw Error("Manifest unavailable");return r.json()}).then(data=>{
     groups = data; pages = groups.flatMap(g=>g.pages); route();
   }).catch(error=>{

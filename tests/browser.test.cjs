@@ -29,9 +29,16 @@ test('documentation navigation, cross-links, responsive layout and themes', asyn
     assert.equal(await page.locator('#page-nav details').count(),8);
     const desktopLayout = await page.evaluate(()=>{
       const sidebar=document.querySelector('aside').getBoundingClientRect(), main=document.querySelector('main').getBoundingClientRect();
-      return sidebar.top === main.top && sidebar.right < main.left && sidebar.width < main.width;
+      return Math.abs(sidebar.top-main.top)<=1 && sidebar.right <= main.left+1 && sidebar.width < main.width &&
+        sidebar.left===0 && Math.abs(main.right-innerWidth)<=1 && Math.abs(main.bottom-innerHeight)<=1;
     });
     assert.equal(desktopLayout,true);
+    assert.equal(await page.locator('main').evaluate(e=>getComputedStyle(e).overflowY),'auto');
+    assert.equal(await page.locator('aside').evaluate(e=>getComputedStyle(e).overflowY),'auto');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true);
+    await page.setViewportSize({width:1920,height:1080});
+    assert.equal(await page.locator('main').evaluate(e=>e.clientWidth>1400),true);
+    await page.setViewportSize({width:1440,height:900});
     assert.equal(await page.locator('meta[name="color-scheme"]').count(),1);
     assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'dark');
     await page.locator('#article').getByRole('link',{name:'keep',exact:true}).click();
@@ -50,6 +57,7 @@ test('documentation navigation, cross-links, responsive layout and themes', asyn
     assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'dark');
     await page.setViewportSize({width:390,height:844});
     assert.equal(await page.evaluate(()=>document.querySelector('aside').getBoundingClientRect().bottom <= document.querySelector('main').getBoundingClientRect().top),true);
+    assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('dvh-100')),false);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     await page.locator('#navigation').evaluate(e=>e.open=true);
     await page.locator('#page-filter').fill('clipboard');
