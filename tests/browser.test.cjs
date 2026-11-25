@@ -28,13 +28,13 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     await page.locator('#article h1').filter({hasText:'Documentation'}).waitFor();
     assert.equal(await page.locator('#page-nav details').count(),8);
     const desktopLayout = await page.evaluate(()=>{
-      const sidebar=document.querySelector('aside').getBoundingClientRect(), main=document.querySelector('main').getBoundingClientRect();
+      const sidebar=document.querySelector('#sidebar').getBoundingClientRect(), main=document.querySelector('main').getBoundingClientRect();
       return Math.abs(sidebar.top-main.top)<=1 && sidebar.right <= main.left+1 && sidebar.width < main.width &&
         sidebar.left===0 && Math.abs(main.right-(document.querySelector("#outline").hidden?innerWidth:document.querySelector("#outline").getBoundingClientRect().left))<=1 && Math.abs(main.bottom-innerHeight)<=1;
     });
     assert.equal(desktopLayout,true);
     assert.equal(await page.locator('main').evaluate(e=>getComputedStyle(e).overflowY),'auto');
-    assert.equal(await page.locator('aside').evaluate(e=>getComputedStyle(e).overflowY),'auto');
+    assert.equal(await page.locator('#sidebar').evaluate(e=>getComputedStyle(e).overflowY),'auto');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true);
     await page.setViewportSize({width:1920,height:1080});
     assert.equal(await page.locator('main').evaluate(e=>e.clientWidth>1200),true);
@@ -58,7 +58,7 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     assert.ok(await page.locator('#outline-links a').count()>0);
     assert.equal(await page.locator('#breadcrumbs').innerText(),'Docs / keep / User guide');
     await page.setViewportSize({width:390,height:844});
-    assert.equal(await page.evaluate(()=>document.querySelector('aside').getBoundingClientRect().bottom <= document.querySelector('main').getBoundingClientRect().top),true);
+    assert.equal(await page.evaluate(()=>document.querySelector('#sidebar').getBoundingClientRect().bottom <= document.querySelector('main').getBoundingClientRect().top),true);
     assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('dvh-100')),false);
     assert.equal(await page.locator('#outline').isVisible(),false);
     assert.equal(await page.locator('#mobile-toc').isVisible(),true);
