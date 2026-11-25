@@ -16,7 +16,7 @@ Open http://localhost:8000. Marked and DOMPurify are version-pinned; keep HTML s
 
 ## Design
 
-Follow [util's design principles](https://github.com/NamTheDev/util/blob/main/design/DESIGN_PRINCIPLES.md) and [native dark theme specification](https://github.com/NamTheDev/util/blob/main/formatting/THEME_SIGNAL.md). Load local Bootstrap, identical util configuration, then minimal app CSS. Profile's Source Sans 3, blue links and colored headings are intentional reading-identity exceptions.
+Follow [util's design principles](https://github.com/NamTheDev/util/blob/main/design/DESIGN_PRINCIPLES.md) and [native dark theme specification](https://github.com/NamTheDev/util/blob/main/formatting/THEME_SIGNAL.md). Load local Bootstrap, identical util configuration, then minimal app CSS. Profile's Source Sans 3, blue links and colored headings are intentional reading-identity exceptions. The header title is plain text; the project-link marquee follows Profile's native scrolling implementation, including hover, focus and reduced-motion pauses.
 
 **Fullscreen at every viewport:** fixed header, independently scrolling panes, no document scroll or maximum-width article. Contents collapses below 1181px; pages becomes a drawer at 760px and below.
 

@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '22'
       - run: python3 tests/verify.py
-      - run: node --check assets/site.js
+      - run: node --check assets/site.js && node --check assets/marquee.js
       - name: Check canonical design configuration
         run: |
           curl --fail --silent --show-error --location https://raw.githubusercontent.com/NamTheDev/util/main/design/config.css --output /tmp/util-config.css

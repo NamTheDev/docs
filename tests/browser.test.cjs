@@ -32,6 +32,22 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     assert.match(await favicon.text(),/<svg\b/);
     await page.locator('#article h1').filter({hasText:'Documentation'}).waitFor();
     assert.equal(await page.locator('#page-nav details').count(),8);
+    assert.equal(await page.locator('.brand-name').evaluate(e=>e.tagName),'SPAN');
+    assert.equal(await page.locator('a.brand-name').count(),0);
+    assert.equal(await page.locator('.marquee-group').count(),2);
+    const ticker = page.locator('.header-links');
+    assert.equal(await ticker.locator('.marquee-group:not([aria-hidden]) a').count(),11);
+    await page.setViewportSize({width:900,height:900});
+    await page.waitForFunction(()=>document.querySelector('.header-links').scrollLeft>0);
+    await ticker.hover();
+    const pausedAt = await ticker.evaluate(e=>e.scrollLeft);
+    await page.waitForTimeout(250);
+    assert.equal(await ticker.evaluate(e=>e.scrollLeft),pausedAt);
+    await page.mouse.move(0,899);
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.equal(await ticker.locator('.marquee-group[aria-hidden="true"]').isVisible(),false);
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    await page.setViewportSize({width:1440,height:900});
     const fullscreen = () => page.evaluate(()=>{
       const main=document.querySelector('main').getBoundingClientRect();
       const workspace=document.querySelector('#workspace').getBoundingClientRect();

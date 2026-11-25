@@ -15,16 +15,28 @@
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js" defer></script>
   <link rel="stylesheet" href="assets/docs.css">
+  <script src="assets/marquee.js" defer></script>
   <script src="assets/site.js" defer></script>
 </head>
 <body class="bg-body fg-body d-flex flex-column dvh-100 overflow-hidden">
   <a class="visually-hidden-focusable" href="#main-content">Skip to content</a>
   <header class="site-header bg-body border-bottom flex-shrink-0 mx-4 lg:mx-6">
     <div class="header-inner d-flex align-items-center w-100 gap-3">
-      <a href="?page=home" class="brand-name fs-lg fw-semibold text-decoration-none fg-body flex-shrink-0">NAMTHEDEV / DOCS</a>
-      <nav aria-label="External navigation" class="d-flex align-items-center gap-3 ms-auto fs-sm">
-        <a href="https://github.com/NamTheDev/docs">GitHub</a>
-        <a href="https://namthedev.github.io/profile/">Profile</a>
+      <span class="brand-name fs-lg fw-semibold fg-body flex-shrink-0">NAMTHEDEV / DOCS</span>
+      <nav class="header-links flex-grow-1 min-w-0 text-nowrap" aria-label="Project repositories and web apps">
+        <span class="quick-links-label text-uppercase fw-bold flex-shrink-0 fg-3 fs-xs">Projects</span>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://github.com/NamTheDev/profile">GitHub - Profile</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://github.com/NamTheDev/MeditorD">GitHub - MeditorD</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://github.com/NamTheDev/MCP-Server">GitHub - MCP-Server</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://github.com/NamTheDev/keep">GitHub - keep</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://github.com/NamTheDev/clipboard">GitHub - clipboard</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://github.com/NamTheDev/util">GitHub - util</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://github.com/NamTheDev/docs">GitHub - docs</a>
+        <span class="quick-links-label text-uppercase fw-bold flex-shrink-0 fg-3 fs-xs">Web apps</span>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://namthedev.github.io/profile/">Profile</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://namthedev.github.io/keep/">keep</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://namthedev.github.io/clipboard/">clipboard</a>
+        <a class="flex-shrink-0 fs-sm lh-sm text-nowrap" href="https://github.com/NamTheDev">GitHub - NamTheDev</a>
       </nav>
       <button id="menu-toggle" class="btn btn-outline theme-secondary rounded-5 btn-sm flex-shrink-0" type="button" aria-controls="sidebar" aria-expanded="false" hidden>Pages</button>
     </div>
