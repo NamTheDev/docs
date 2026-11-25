@@ -40,7 +40,7 @@ Example manifest entry:
 }
 ```
 
-Keep old slugs as aliases when consolidating documents. A legacy query such as `?page=keep-usage` opens the Usage section of the keep guide. Use relative links between registered Markdown files; external source links should identify the relevant repository and, where practical, a reviewed commit.
+Keep old slugs as aliases when consolidating documents. A legacy query such as `?page=keep-usage` opens the Usage section of the keep guide. Use relative links between registered Markdown files; external source links should point to the relevant repository or source file on the main branch.
 
 Verify commands, configuration names and examples against source files. State limitations rather than inventing behavior. Keep explanatory prose concise and preserve project-specific terminology.
 

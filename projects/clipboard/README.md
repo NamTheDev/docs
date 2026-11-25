@@ -105,4 +105,4 @@ CI also runs Chromium UI verification and Pages smoke tests. Verify API availabi
 
 ## Source references
 
-Reviewed against [4ba953a](https://github.com/NamTheDev/clipboard/tree/4ba953af6df72e9b69414e33d6804e844d5dcedc): [server](https://github.com/NamTheDev/clipboard/blob/4ba953af6df72e9b69414e33d6804e844d5dcedc/server.mjs), [security](https://github.com/NamTheDev/clipboard/blob/4ba953af6df72e9b69414e33d6804e844d5dcedc/server/security.mjs), [API tests](https://github.com/NamTheDev/clipboard/blob/4ba953af6df72e9b69414e33d6804e844d5dcedc/tests/server.test.mjs), [Pages workflow](https://github.com/NamTheDev/clipboard/blob/4ba953af6df72e9b69414e33d6804e844d5dcedc/.github/workflows/deploy-pages.yml).
+[server](https://github.com/NamTheDev/clipboard/blob/main/server.mjs), [security](https://github.com/NamTheDev/clipboard/blob/main/server/security.mjs), [API tests](https://github.com/NamTheDev/clipboard/blob/main/tests/server.test.mjs), [Pages workflow](https://github.com/NamTheDev/clipboard/blob/main/.github/workflows/deploy-pages.yml).

@@ -81,4 +81,4 @@ The repository no longer contains the deployment dashboard. No Pages publishing 
 
 ## Source references
 
-Reviewed against [e296b84](https://github.com/NamTheDev/util/tree/e296b84e0e55a560af9be7d47bdc361a53e53192). Consult the live canonical links above for current standards.
+Consult the live canonical links above for current standards.

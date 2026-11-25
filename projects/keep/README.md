@@ -86,4 +86,4 @@ Run typecheck and build using the commands above. The UI workflow exercises edit
 
 ## Source references
 
-Reviewed against [eaafdfc](https://github.com/NamTheDev/keep/tree/eaafdfcf16fe904f417a2e1f3e4f34f271479f57): [guide](https://github.com/NamTheDev/keep/blob/eaafdfcf16fe904f417a2e1f3e4f34f271479f57/docs/PROJECT_GUIDE.md), [data model](https://github.com/NamTheDev/keep/blob/eaafdfcf16fe904f417a2e1f3e4f34f271479f57/src/features/notes/data.ts), [backup](https://github.com/NamTheDev/keep/blob/eaafdfcf16fe904f417a2e1f3e4f34f271479f57/src/features/notes/backup.ts), [build](https://github.com/NamTheDev/keep/blob/eaafdfcf16fe904f417a2e1f3e4f34f271479f57/scripts/build.ts), [server](https://github.com/NamTheDev/keep/blob/eaafdfcf16fe904f417a2e1f3e4f34f271479f57/server.ts).
+[guide](https://github.com/NamTheDev/keep/blob/main/docs/PROJECT_GUIDE.md), [data model](https://github.com/NamTheDev/keep/blob/main/src/features/notes/data.ts), [backup](https://github.com/NamTheDev/keep/blob/main/src/features/notes/backup.ts), [build](https://github.com/NamTheDev/keep/blob/main/scripts/build.ts), [server](https://github.com/NamTheDev/keep/blob/main/server.ts).

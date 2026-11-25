@@ -87,4 +87,4 @@ GitHub Actions checks navigation, media markup, responsive layout, marquee behav
 
 ## Source references
 
-Reviewed against [2d48ce1](https://github.com/NamTheDev/profile/tree/2d48ce1cbee59ecdefd0fba97deb9d339b0147d6): [manifest](https://github.com/NamTheDev/profile/blob/2d48ce1cbee59ecdefd0fba97deb9d339b0147d6/manifest.json), [design](https://github.com/NamTheDev/profile/blob/2d48ce1cbee59ecdefd0fba97deb9d339b0147d6/docs/DESIGN.md), [catalogue refresh](https://github.com/NamTheDev/profile/blob/2d48ce1cbee59ecdefd0fba97deb9d339b0147d6/scripts/sync_catalogue.py), [verification](https://github.com/NamTheDev/profile/blob/2d48ce1cbee59ecdefd0fba97deb9d339b0147d6/.github/workflows/code-verification.yml).
+[manifest](https://github.com/NamTheDev/profile/blob/main/manifest.json), [design](https://github.com/NamTheDev/profile/blob/main/docs/DESIGN.md), [catalogue refresh](https://github.com/NamTheDev/profile/blob/main/scripts/sync_catalogue.py), [verification](https://github.com/NamTheDev/profile/blob/main/.github/workflows/code-verification.yml).
