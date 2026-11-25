@@ -1,91 +1,86 @@
-/* Continuously loop the existing header links without maintaining a second list. */
-function initHeaderMarquee() {
+/* Native-scroll marquee; enough repeated groups to loop at any viewport width. */
+(() => {
   const nav = document.querySelector(".header-links");
   if (!nav || nav.querySelector(".marquee-track")) return;
 
   const track = document.createElement("div");
-  track.className = "marquee-track d-flex align-items-center";
+  track.className = "marquee-track d-flex align-items-center flex-shrink-0";
   const group = document.createElement("div");
-  group.className = "marquee-group d-flex flex-shrink-0 align-items-center";
+  group.className = "marquee-group d-flex align-items-center flex-shrink-0 gap-5 pe-5";
   while (nav.firstChild) group.append(nav.firstChild);
-
-  const duplicate = group.cloneNode(true);
-  duplicate.setAttribute("aria-hidden", "true");
-  duplicate.querySelectorAll("a, button, [tabindex]").forEach((el) => {
-    el.setAttribute("tabindex", "-1");
-  });
-
-  track.append(group, duplicate);
+  track.append(group);
   nav.append(track);
-  nav.classList.add("marquee-enabled");
 
-  // Native scroll keeps trackpad, touch and keyboard scrolling available.
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const hover = window.matchMedia("(hover: hover)");
-  let loopWidth = 0, manualUntil = 0, activePointer = null;
-  let previous = 0, remainder = 0, automaticPosition = nav.scrollLeft;
-  const resumeDelay = 1500;
-  const pauseManual = () => { manualUntil = performance.now() + resumeDelay; };
-  const updateWidth = () => {
-    loopWidth = Math.round(group.getBoundingClientRect().width);
-    nav.classList.toggle("marquee-overflow", loopWidth > nav.clientWidth);
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const hover = matchMedia("(hover: hover)");
+  let cycle = 0, pauseUntil = 0, pointer = null;
+  let previous = 0, remainder = 0, expected = 0;
+  const pause = () => { pauseUntil = performance.now() + 1500; };
+  const setScroll = value => {
+    nav.scrollLeft = value;
+    expected = nav.scrollLeft;
   };
-  updateWidth();
-  const observer = new ResizeObserver(updateWidth);
+
+  function measure() {
+    cycle = Math.round(group.getBoundingClientRect().width);
+    if (cycle < 1 || !nav.clientWidth) return;
+    // Keep at least one full cycle of scroll range even if the first group
+    // is shorter than the viewport. Only the original is keyboard focusable.
+    const count = Math.max(2, Math.ceil(nav.clientWidth / cycle) + 1);
+    while (track.childElementCount < count) {
+      const copy = group.cloneNode(true);
+      copy.setAttribute("aria-hidden", "true");
+      copy.querySelectorAll("a, button, [tabindex]").forEach(el=>el.tabIndex=-1);
+      track.append(copy);
+    }
+    while (track.childElementCount > count) track.lastElementChild.remove();
+    nav.classList.toggle("marquee-overflow", !reduced.matches || cycle > nav.clientWidth);
+    if (!reduced.matches && nav.scrollLeft >= cycle) setScroll(nav.scrollLeft % cycle);
+  }
+  const observer = new ResizeObserver(measure);
   observer.observe(group);
   observer.observe(nav);
+  reduced.addEventListener("change", measure);
+  measure();
 
   nav.addEventListener("pointerleave", event => {
-    if (event.pointerType === "touch" || !hover.matches) return;
-    // Resume immediately on mouse exit, even after manual scrolling.
-    manualUntil = 0;
-    automaticPosition = nav.scrollLeft;
+    if (event.pointerType !== "touch" && hover.matches) {
+      pauseUntil = 0;
+      expected = nav.scrollLeft;
+    }
   });
   nav.addEventListener("wheel", event => {
     if (event.ctrlKey || event.metaKey) return;
-    // Capture wheel input over the ticker without scrolling the page.
     event.preventDefault();
-    if (nav.scrollWidth <= nav.clientWidth ||
-        !event.deltaX || Math.abs(event.deltaY) > Math.abs(event.deltaX)) return;
-    pauseManual();
+    if (!event.deltaX || Math.abs(event.deltaY) > Math.abs(event.deltaX)) return;
+    pause();
     const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? nav.clientWidth : 1;
-    nav.scrollLeft += event.deltaX * unit;
-  }, { passive: false });
+    setScroll(nav.scrollLeft + event.deltaX * unit);
+  }, {passive:false});
   nav.addEventListener("scroll", () => {
-    // Native touch momentum and keyboard scrolling extend the manual pause.
-    if (Math.abs(nav.scrollLeft - automaticPosition) > .5) pauseManual();
-  }, { passive: true });
-  nav.addEventListener("pointerdown", event => {
-    activePointer = event.pointerId;
-    pauseManual();
-  });
-  const releasePointer = event => {
-    if (event.pointerId !== activePointer) return;
-    activePointer = null;
-    pauseManual();
+    if (Math.abs(nav.scrollLeft - expected) > .5) pause();
+  }, {passive:true});
+  nav.addEventListener("pointerdown", event=>{pointer=event.pointerId; pause();});
+  const release = event => {
+    if (event.pointerId === pointer) {pointer=null; pause();}
   };
-  window.addEventListener("pointerup", releasePointer);
-  window.addEventListener("pointercancel", releasePointer);
+  window.addEventListener("pointerup", release);
+  window.addEventListener("pointercancel", release);
 
-  // Resume the same native scroll position after interaction; loop at one group.
-  const advance = now => {
+  function advance(now) {
     const elapsed = previous ? Math.min(now - previous, 50) : 0;
     previous = now;
-    const paused = reducedMotion.matches || loopWidth <= nav.clientWidth ||
-      activePointer !== null || now < manualUntil || (hover.matches && nav.matches(":hover")) ||
+    const paused = reduced.matches || cycle < 1 || !nav.clientWidth ||
+      pointer !== null || now < pauseUntil || (hover.matches && nav.matches(":hover")) ||
       nav.querySelector(":focus-visible") !== null;
-    if (!paused) {
+    if (paused) remainder=0;
+    else {
       const distance = elapsed * .045 + remainder;
       const step = Math.floor(distance);
       remainder = distance - step;
-      if (step) {
-        nav.scrollLeft = (nav.scrollLeft + step) % loopWidth;
-        automaticPosition = nav.scrollLeft;
-      }
-    } else remainder = 0;
+      if (step) setScroll((nav.scrollLeft + step) % cycle);
+    }
     requestAnimationFrame(advance);
-  };
+  }
   requestAnimationFrame(advance);
-}
-
-initHeaderMarquee();
+})();

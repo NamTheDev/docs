@@ -34,18 +34,55 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     assert.equal(await page.locator('#page-nav details').count(),8);
     assert.equal(await page.locator('.brand-name').evaluate(e=>e.tagName),'SPAN');
     assert.equal(await page.locator('a.brand-name').count(),0);
-    assert.equal(await page.locator('.marquee-group').count(),2);
     const ticker = page.locator('.header-links');
-    assert.equal(await ticker.locator('.marquee-group:not([aria-hidden]) a').count(),11);
-    await page.setViewportSize({width:900,height:900});
-    await page.waitForFunction(()=>document.querySelector('.header-links').scrollLeft>0);
+    const original = ticker.locator('.marquee-group:not([aria-hidden])');
+    assert.equal(await original.locator('a').count(),11);
+    // Check spacing, clipping and sustained movement at the reported wide viewport,
+    // plus a viewport larger than one complete set of links.
+    for (const width of [1440, 1920, 2560, 900, 390]) {
+      await page.setViewportSize({width,height:900});
+      await page.mouse.move(0,899);
+      await page.waitForFunction(()=>{
+        const n=document.querySelector('.header-links'), g=n.querySelector('.marquee-group');
+        return n.scrollWidth-n.clientWidth >= Math.round(g.getBoundingClientRect().width)-1;
+      });
+      const geometry=await ticker.evaluate(n=>{
+        const g=n.querySelector('.marquee-group'), items=[...g.children];
+        const brand=document.querySelector('.brand-name').getBoundingClientRect();
+        const box=n.getBoundingClientRect();
+        return {
+          gap:Math.min(...items.slice(1).map((item,i)=>item.getBoundingClientRect().left-items[i].getBoundingClientRect().right)),
+          endGap:parseFloat(getComputedStyle(g).paddingRight),
+          clipped:box.right<=innerWidth && box.left>=brand.right && getComputedStyle(n).overflowX==='auto',
+          noOverflow:document.documentElement.scrollWidth<=innerWidth+1
+        };
+      });
+      assert.ok(geometry.gap>=8 && geometry.endGap>=8,JSON.stringify(geometry));
+      assert.ok(geometry.clipped && geometry.noOverflow,JSON.stringify(geometry));
+      const before=await ticker.evaluate(n=>({x:n.scrollLeft,cycle:Math.round(n.querySelector('.marquee-group').getBoundingClientRect().width)}));
+      await page.waitForFunction(({x,cycle})=>{
+        const n=document.querySelector('.header-links');
+        return (n.scrollLeft-x+cycle)%cycle>=18;
+      },before,{timeout:4000});
+    }
+    await page.setViewportSize({width:1440,height:900});
     await ticker.hover();
-    const pausedAt = await ticker.evaluate(e=>e.scrollLeft);
-    await page.waitForTimeout(250);
-    assert.equal(await ticker.evaluate(e=>e.scrollLeft),pausedAt);
+    const pausedAt=await ticker.evaluate(n=>n.scrollLeft);
+    await page.waitForTimeout(300);
+    assert.equal(await ticker.evaluate(n=>n.scrollLeft),pausedAt);
+    // Force the seam and ensure automatic movement wraps rather than stalling.
+    const cycle=await ticker.evaluate(n=>{
+      const w=Math.round(n.querySelector('.marquee-group').getBoundingClientRect().width);
+      n.scrollLeft=w-12; return w;
+    });
     await page.mouse.move(0,899);
+    await page.waitForFunction(w=>document.querySelector('.header-links').scrollLeft<w-100,cycle,{timeout:4000});
     await page.emulateMedia({reducedMotion:'reduce'});
-    assert.equal(await ticker.locator('.marquee-group[aria-hidden="true"]').isVisible(),false);
+    await ticker.locator('.marquee-group[aria-hidden="true"]').first().waitFor({state:'hidden'});
+    const reducedAt=await ticker.evaluate(n=>n.scrollLeft);
+    await page.waitForTimeout(300);
+    assert.equal(await ticker.evaluate(n=>n.scrollLeft),reducedAt);
+    assert.equal(await original.locator('a').count(),11);
     await page.emulateMedia({reducedMotion:'no-preference'});
     await page.setViewportSize({width:1440,height:900});
     const fullscreen = () => page.evaluate(()=>{
