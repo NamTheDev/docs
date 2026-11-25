@@ -1,0 +1,24 @@
+name: Documentation verification
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python3 tests/verify.py
+      - run: node --check assets/site.js && node --check assets/theme.js
+      - name: Check canonical design configuration
+        run: |
+          curl --fail --silent --show-error --location https://raw.githubusercontent.com/NamTheDev/util/main/design/config.css --output /tmp/util-config.css
+          cmp assets/config.css /tmp/util-config.css
+      - run: npm install --no-save --ignore-scripts playwright@1.56.1 marked@15.0.12 dompurify@3.2.6
+      - run: npx playwright install --with-deps chromium
+      - run: node --test tests/browser.test.cjs
