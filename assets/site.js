@@ -3,33 +3,40 @@
   const article = document.querySelector("#article");
   const nav = document.querySelector("#page-nav");
   const filter = document.querySelector("#page-filter");
-  const navigation = document.querySelector("#navigation");
   const root = new URL("./", location.href);
-  const mobile = matchMedia("(max-width: 991.98px)");
+  const mobile = matchMedia("(max-width: 760px)");
   const main = document.querySelector("#main-content");
   const sidebar = document.querySelector("#sidebar");
-  const workspace = document.querySelector("#workspace");
-  const wide = matchMedia("(min-width: 1280px)");
+  const wide = matchMedia("(min-width: 1181px)");
   const outline = document.querySelector("#outline");
   const mobileToc = document.querySelector("#mobile-toc");
   const outlineLinks = document.querySelector("#outline-links");
   const mobileLinks = document.querySelector("#mobile-toc-links");
-  const breadcrumbs = document.querySelector("#breadcrumbs");
+  const menu = document.querySelector("#menu-toggle");
+  const backdrop = document.querySelector("#sidebar-backdrop");
+  let drawerOpen = false;
+  function setDrawer(open, restoreFocus = false) {
+    drawerOpen = mobile.matches && open;
+    sidebar.hidden = mobile.matches && !drawerOpen;
+    backdrop.hidden = !drawerOpen;
+    menu.setAttribute("aria-expanded", String(drawerOpen));
+    if (drawerOpen) filter.focus();
+    else if (restoreFocus && mobile.matches) menu.focus();
+  }
+  menu.addEventListener("click",()=>setDrawer(!drawerOpen,true));
+  backdrop.addEventListener("click",()=>setDrawer(false,true));
+  document.addEventListener("keydown",event=>{if(event.key==="Escape" && drawerOpen){event.preventDefault();setDrawer(false,true);}});
   function updateOutline() {
     const hasSections = outlineLinks.childElementCount > 0;
-    outline.hidden = !wide.matches || !hasSections;
+    outline.hidden = !wide.matches;
+    outline.style.visibility = hasSections ? "" : "hidden";
     mobileToc.hidden = wide.matches || !hasSections;
   }
   wide.addEventListener("change", updateOutline);
   function updateLayout() {
-    const desktop = !mobile.matches;
-    for (const cls of ["dvh-100","overflow-hidden"]) document.body.classList.toggle(cls, desktop);
-    workspace.classList.toggle("overflow-hidden", desktop);
-    sidebar.classList.toggle("overflow-auto", desktop);
-    sidebar.classList.toggle("border-end", desktop);
-    sidebar.classList.toggle("border-bottom", !desktop);
-    main.classList.toggle("overflow-auto", desktop);
-    navigation.open = desktop;
+    menu.hidden = !mobile.matches;
+    setDrawer(false);
+    updateOutline();
   }
   mobile.addEventListener("change", updateLayout);
   updateLayout();
@@ -55,12 +62,12 @@
       if (!matches.length) continue;
       const details = element("details", "pb-1");
       details.open = !!query || matches.some(p => p.slug === current) || group.group === "Documentation";
-      details.append(element("summary", "fw-semibold text-break py-2 fg-2", group.group));
+      details.append(element("summary", "fw-semibold text-break py-1 fg-2 fs-sm", group.group));
       const list = element("ul", "list-unstyled m-0 ms-2 ps-2");
       for (const page of matches) {
         const item = element("li");
         const active = page.slug === current;
-        const a = element("a", "d-block text-decoration-none rounded-5 py-1 px-3 text-break " + (active ? "bg-2 fg-primary fw-semibold" : "fg-2"), page.title);
+        const a = element("a", "page-link d-block text-decoration-none py-1 px-2 text-break", page.title);
         a.href = pageUrl(page.slug);
         if (active) a.setAttribute("aria-current", "page");
         item.append(a); list.append(item);
@@ -87,22 +94,19 @@
       const base = heading.textContent.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu,"").replace(/\s+/g,"-") || "section";
       let id = base, i = 2; while (used.has(id)) id = base + "-" + i++;
       used.add(id); heading.id = id;
-      heading.classList.add("text-break", "fw-semibold", "mt-4", "mb-3");
-      if (heading.tagName === "H1") { heading.classList.remove("mt-4"); heading.classList.add("fg-body","fs-2xl","mb-4"); }
-      else if (heading.tagName === "H2") heading.classList.add("fs-xl","border-bottom","pb-2");
-      else heading.classList.add("fs-lg");
+      heading.classList.add("text-break");
     }
     for (const table of article.querySelectorAll("table")) {
       table.classList.add("table","table-bordered","fs-sm","align-middle");
       const wrapper = element("div","overflow-auto my-3");
       table.before(wrapper); wrapper.append(table);
     }
-    for (const pre of article.querySelectorAll("pre")) pre.classList.add("bg-1","border","rounded-6","p-4","overflow-auto");
+    for (const pre of article.querySelectorAll("pre")) pre.classList.add("bg-1","border","p-3","overflow-auto");
     for (const img of article.querySelectorAll("img")) { img.classList.add("img-fluid"); img.loading = "lazy"; }
-    for (const quote of article.querySelectorAll("blockquote")) quote.classList.add("bg-1","border-start","p-3","rounded-5");
+    for (const quote of article.querySelectorAll("blockquote")) quote.classList.add("bg-1","border-start","p-3");
     outlineLinks.replaceChildren(); mobileLinks.replaceChildren();
     for (const heading of headings) {
-      const a = element("a", "d-block text-decoration-none py-1 text-break fg-2" + (heading.tagName==="H2"?"":" ms-3"), heading.textContent);
+      const a = element("a", "d-block text-decoration-none py-1 text-break fg-2 fs-sm" + (heading.tagName==="H2"?"":" ms-3"), heading.textContent);
       a.href = "#" + heading.id;
       outlineLinks.append(a); mobileLinks.append(a.cloneNode(true));
     }
@@ -121,11 +125,6 @@
     const page = pages.find(p => p.slug === slug) || pages[0];
     if (!page) return;
     const token = ++version; current = page.slug; renderNav();
-    const group = groups.find(g=>g.pages.includes(page));
-    breadcrumbs.replaceChildren();
-    const home = element("a","text-decoration-none","Docs"); home.href=pageUrl("home");
-    breadcrumbs.append(home);
-    if(page.slug!=="home") breadcrumbs.append(document.createTextNode(" / "+group.group+" / "+page.title));
     outlineLinks.replaceChildren(); mobileLinks.replaceChildren(); updateOutline();
     article.replaceChildren(element("p","fg-3","Loading…"));
     try {
@@ -138,7 +137,6 @@
         try { document.getElementById(decodeURIComponent(hash.replace(/^#/,"")))?.scrollIntoView(); } catch {}
       } else {
         main.scrollTop = 0;
-        window.scrollTo(0,0);
       }
     } catch (err) {
       if (token !== version) return;
@@ -158,7 +156,7 @@
     if (url.origin !== root.origin || url.pathname !== root.pathname || !url.searchParams.has("page") || !pages.some(p=>p.slug===url.searchParams.get("page"))) return;
     if (url.href===location.href) return;
     event.preventDefault(); history.pushState({}, "", url.href);
-    if (mobile.matches) navigation.open = false;
+    if (mobile.matches) setDrawer(false);
     route();
   });
   filter.addEventListener("input",renderNav);

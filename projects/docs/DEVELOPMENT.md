@@ -30,4 +30,4 @@ The source verification workflow checks manifest paths, internal Markdown links 
 
 ## Layout
 
-The desktop site uses independently scrolling navigation and reading panes, a centered reading column, and a right-hand section outline on wide screens. On narrower screens the outline collapses above the article. Bootstrap utilities control spacing and layout; assets/docs.css contains only reading-column and sidebar geometry. The native theme is fixed dark.
+The website is a fullscreen application at every viewport size: the header stays visible, the body never scrolls, and the article and navigation panes scroll independently. Use Profile's minimal reading identity (Source Sans 3, flat surfaces, blue links, colored Markdown headings, and narrow page/contents rails), with the canonical util configuration unchanged. The article fills the available width; never reintroduce a centered maximum-width reading column. The contents rail collapses into an inline section list below 1181px, and the pages rail becomes a drawer at 760px and below. Keep the fixed dark theme. Application-specific CSS is limited to reading identity and pane geometry.

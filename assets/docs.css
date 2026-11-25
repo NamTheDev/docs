@@ -1,4 +1,53 @@
-/* Reading geometry not expressed by shared Bootstrap utilities. */
-#reading-column {max-width: 82ch;}
-@media (min-width: 992px) {#sidebar {width: 248px;}}
-@media (min-width: 1280px) {#outline {width: 232px;}}
+/* Profile reading identity; app-specific typography and full-viewport pane geometry. */
+:root {
+  --font-ui: "Source Sans 3", system-ui, sans-serif;
+  --font-size: 1.0625rem;
+  --line-height: 1.7;
+  --bs-link-color: var(--info);
+  --bs-link-hover-color: var(--info);
+  --bs-link-decoration: none;
+  --bs-border-color: var(--surface-0);
+  --rail-width: 13.5rem;
+  --heading-teal: #94e2d5;
+  --heading-sky: #89dceb;
+  --heading-sapphire: #74c7ec;
+}
+.header-inner {min-height:60px;}
+.brand-name {font-size:1.25rem; letter-spacing:-.02em;}
+#workspace {display:grid; grid-template-columns:var(--rail-width) minmax(0,1fr) var(--rail-width); gap:1.5rem;}
+#workspace > aside, #main-content {overscroll-behavior:contain;}
+#main-content {padding-inline-end:.5rem; scrollbar-gutter:stable;}
+#page-filter {--bs-control-min-height:34px; --bs-control-font-size:.8rem; --bs-control-bg:var(--base);}
+.page-link {border-left:2px solid transparent; color:var(--subtext-1); font-size:.875rem; line-height:1.35;}
+.page-link:hover, .page-link:focus-visible, .page-link[aria-current="page"] {background:var(--mantle); color:var(--text); text-decoration:none;}
+.page-link[aria-current="page"] {border-left-color:var(--accent); font-weight:600;}
+a:hover, a:focus-visible {text-decoration:underline;}
+:where(a,button,input,summary):focus-visible {outline:2px solid var(--accent); outline-offset:2px;}
+.article > :first-child {margin-top:0;}
+.article :is(h1,h2,h3,h4,h5,h6) {line-height:1.3; font-weight:600; scroll-margin-top:.75rem;}
+.article h1 {margin:0 0 1.25rem; padding-bottom:.32rem; border-bottom:1px solid var(--surface-0); color:var(--success); font-size:2rem; letter-spacing:-.025em;}
+.article h2 {margin:2.25rem 0 .75rem; padding-bottom:.25rem; border-bottom:1px solid var(--surface-0); color:var(--heading-teal); font-size:1.5rem;}
+.article h3 {margin:1.75rem 0 .5rem; color:var(--heading-sky); font-size:1.25rem;}
+.article h4 {color:var(--heading-sapphire); font-size:1.0625rem;}
+.article p {margin:.55rem 0 .85rem;}
+.article :is(ul,ol) {margin:.5rem 0 1rem; padding-left:1.75rem;}
+.article :is(ul,ol)>li {margin-block:.2rem;}
+.article code {padding:.05em .22em; border:1px solid var(--surface-0); background:var(--mantle); color:inherit; font-size:.875rem;}
+.article pre code {padding:0; border:0; background:transparent; white-space:pre;}
+.article .table {--bs-table-cell-padding-y:.45rem; --bs-table-cell-padding-x:.55rem; --bs-table-border-color:var(--surface-1);}
+#sidebar-backdrop {inset:0; z-index:19; background:rgb(0 0 0 / .42);}
+@media (max-width:1180px) {
+  #workspace {grid-template-columns:var(--rail-width) minmax(0,1fr);}
+  #outline {display:none;}
+}
+@media (max-width:760px) {
+  :root {--font-size:1rem;}
+  .header-inner {min-height:52px;}
+  .brand-name {font-size:.95rem;}
+  #workspace {grid-template-columns:minmax(0,1fr); gap:0;}
+  #sidebar {position:absolute; inset:0 auto 0 0; z-index:20; width:min(84vw,19rem); padding:1rem; background:var(--base); border-right:1px solid var(--surface-0);}
+  .page-link {min-height:40px;}
+  .article h1 {font-size:1.75rem;}
+  .article h2 {font-size:1.375rem;}
+}
+@media (max-width:380px) {.header-inner {flex-wrap:wrap; padding-block:.4rem;}}

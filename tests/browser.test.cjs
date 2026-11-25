@@ -27,18 +27,19 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     await page.goto(url);
     await page.locator('#article h1').filter({hasText:'Documentation'}).waitFor();
     assert.equal(await page.locator('#page-nav details').count(),8);
-    const desktopLayout = await page.evaluate(()=>{
-      const sidebar=document.querySelector('#sidebar').getBoundingClientRect(), main=document.querySelector('main').getBoundingClientRect();
-      return Math.abs(sidebar.top-main.top)<=1 && sidebar.right <= main.left+1 && sidebar.width < main.width &&
-        sidebar.left===0 && Math.abs(main.right-(document.querySelector("#outline").hidden?innerWidth:document.querySelector("#outline").getBoundingClientRect().left))<=1 && Math.abs(main.bottom-innerHeight)<=1;
+    const fullscreen = () => page.evaluate(()=>{
+      const main=document.querySelector('main').getBoundingClientRect();
+      const workspace=document.querySelector('#workspace').getBoundingClientRect();
+      return Math.abs(workspace.bottom-innerHeight)<=1 && main.bottom<=workspace.bottom+1 &&
+        document.documentElement.scrollHeight<=innerHeight+1 && document.documentElement.scrollWidth<=innerWidth+1;
     });
-    assert.equal(desktopLayout,true);
+    assert.equal(await fullscreen(),true);
     assert.equal(await page.locator('main').evaluate(e=>getComputedStyle(e).overflowY),'auto');
     assert.equal(await page.locator('#sidebar').evaluate(e=>getComputedStyle(e).overflowY),'auto');
-    assert.equal(await page.evaluate(()=>document.documentElement.scrollHeight<=innerHeight+1),true);
+    assert.equal(await page.locator('#menu-toggle').isVisible(),false);
     await page.setViewportSize({width:1920,height:1080});
+    assert.equal(await fullscreen(),true);
     assert.equal(await page.locator('main').evaluate(e=>e.clientWidth>1200),true);
-    assert.equal(await page.locator('#reading-column').evaluate(e=>e.clientWidth<850),true);
     await page.setViewportSize({width:1440,height:900});
     assert.equal(await page.locator('meta[name="color-scheme"]').count(),1);
     assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'dark');
@@ -56,20 +57,22 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     assert.equal(await page.locator('html').evaluate(e=>getComputedStyle(e).colorScheme),'dark');
     assert.equal(await page.locator('#outline').isVisible(),true);
     assert.ok(await page.locator('#outline-links a').count()>0);
-    assert.equal(await page.locator('#breadcrumbs').innerText(),'Docs / keep / User guide');
     await page.setViewportSize({width:390,height:844});
-    assert.equal(await page.evaluate(()=>document.querySelector('#sidebar').getBoundingClientRect().bottom <= document.querySelector('main').getBoundingClientRect().top),true);
-    assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('dvh-100')),false);
+    assert.equal(await fullscreen(),true);
+    assert.equal(await page.locator('#sidebar').isVisible(),false);
     assert.equal(await page.locator('#outline').isVisible(),false);
     assert.equal(await page.locator('#mobile-toc').isVisible(),true);
-    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-    await page.locator('#navigation').evaluate(e=>e.open=true);
+    await page.locator('#menu-toggle').click();
+    assert.equal(await page.locator('#sidebar').isVisible(),true);
     await page.locator('#page-filter').fill('clipboard');
     assert.equal(await page.locator('#page-nav details').count(),1);
     await page.locator('#page-nav').getByRole('link',{name:'Overview',exact:true}).click();
     await page.locator('#article h1').filter({hasText:'clipboard'}).waitFor();
-    assert.equal(await page.locator('#navigation').evaluate(e=>e.open),false);
-    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+    assert.equal(await page.locator('#sidebar').isVisible(),false);
+    assert.equal(await fullscreen(),true);
+    await page.locator('#menu-toggle').click();
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'false');
   } finally {
     await browser?.close();
     await new Promise(resolve=>server.close(resolve));

@@ -8,7 +8,7 @@
   <title>docs — NamTheDev</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/bootstrap.min.css">
   <link rel="stylesheet" href="assets/config.css">
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js" defer></script>
@@ -16,45 +16,47 @@
   <link rel="stylesheet" href="assets/docs.css">
   <script src="assets/site.js" defer></script>
 </head>
-<body class="bg-body fg-body d-flex flex-column min-dvh-100">
+<body class="bg-body fg-body d-flex flex-column dvh-100 overflow-hidden">
   <a class="visually-hidden-focusable" href="#main-content">Skip to content</a>
-  <header class="bg-1 border-bottom flex-shrink-0">
-    <div class="w-100 px-4 d-flex align-items-center flex-wrap gap-3 py-3">
-      <a href="?page=home" class="fw-semibold text-decoration-none fg-body">NamTheDev <span class="fg-3 fw-normal">/ docs</span></a>
-      <nav aria-label="External navigation" class="d-flex gap-4 flex-wrap ms-auto align-items-center">
+  <header class="site-header bg-body border-bottom flex-shrink-0 mx-4 lg:mx-6">
+    <div class="header-inner d-flex align-items-center w-100 gap-3">
+      <a href="?page=home" class="brand-name fw-semibold text-decoration-none fg-body flex-shrink-0">NAMTHEDEV / DOCS</a>
+      <nav aria-label="External navigation" class="d-flex align-items-center gap-3 ms-auto fs-sm">
         <a href="https://github.com/NamTheDev/docs">GitHub</a>
         <a href="https://namthedev.github.io/profile/">Profile</a>
       </nav>
+      <button id="menu-toggle" class="btn btn-outline theme-secondary rounded-5 btn-sm flex-shrink-0" type="button" aria-controls="sidebar" aria-expanded="false" hidden>Pages</button>
     </div>
   </header>
-  <div id="workspace" class="d-flex flex-column lg:flex-row flex-grow-1 min-h-0 w-100">
-      <aside id="sidebar" class="bg-1 min-h-0 min-w-0 flex-shrink-0">
-        <details id="navigation" class="p-4" open>
-          <summary class="fw-semibold">Browse docs</summary>
-          <label for="page-filter" class="visually-hidden">Filter documentation</label>
-          <input id="page-filter" type="search" class="form-control rounded-5 my-3" placeholder="Find a page…" autocomplete="off">
-          <nav id="page-nav" class="d-flex flex-column gap-1" aria-label="Documentation pages"></nav>
-        </details>
-      </aside>
-      <main id="main-content" class="flex-fill min-w-0 min-h-0 px-4 lg:px-6 py-4" tabindex="-1">
-        <div id="reading-column" class="mx-auto min-w-0">
-        <nav id="breadcrumbs" aria-label="Breadcrumb" class="fg-3 fs-sm mb-3"></nav>
-        <details id="mobile-toc" class="border rounded-6 p-3 mb-4" hidden><summary class="fw-semibold">On this page</summary><nav id="mobile-toc-links" aria-label="Sections"></nav></details>
-        <article id="article" class="text-break" aria-live="polite">
-          <p class="fg-3">Loading…</p>
-        </article>
-        <noscript><p>JavaScript is required for the website. Read the <a href="https://github.com/NamTheDev/docs/blob/main/pages/HOME.md">Markdown index on GitHub</a>.</p></noscript>
-        <footer class="border-top mt-5 py-4 fs-sm fg-3">
-          <a href="https://github.com/NamTheDev/docs/blob/main/LICENSE">MIT License</a>
-          · <a href="https://github.com/NamTheDev/docs/blob/main/AI_DISCLAIMER.md">AI disclosure</a>
-          · <a href="https://github.com/NamTheDev/util">util</a>
-        </footer>
-        </div>
-      </main>
-      <aside id="outline" class="min-w-0 flex-shrink-0 border-start p-4 overflow-auto" aria-label="On this page" hidden>
-        <p class="fw-semibold mb-3">On this page</p>
-        <nav id="outline-links" class="d-flex flex-column gap-1" aria-label="Sections"></nav>
-      </aside>
+  <div id="workspace" class="position-relative flex-grow-1 min-h-0 min-w-0 overflow-hidden w-100 px-4 lg:px-6 pt-4 pb-3">
+    <aside id="sidebar" class="overflow-auto min-h-0 min-w-0" aria-label="Documentation navigation">
+      <div id="navigation">
+        <h2 class="border-bottom fw-semibold fg-body fs-xs mb-3 pb-2 lh-sm">Pages</h2>
+        <label for="page-filter" class="visually-hidden">Filter documentation</label>
+        <input id="page-filter" type="search" class="form-control rounded-5 mb-3 w-100" placeholder="Filter pages" autocomplete="off">
+        <nav id="page-nav" class="d-flex flex-column" aria-label="Documentation pages"></nav>
+      </div>
+    </aside>
+    <main id="main-content" class="overflow-auto min-w-0 min-h-0" tabindex="-1">
+      <details id="mobile-toc" class="border-top border-bottom mb-3 py-2" hidden>
+        <summary class="fs-sm fw-semibold">Contents</summary>
+        <nav id="mobile-toc-links" class="mt-2" aria-label="Sections"></nav>
+      </details>
+      <article id="article" class="article w-100 min-w-0 text-break" aria-live="polite">
+        <p class="fg-3 fs-xs my-3">Loading…</p>
+      </article>
+      <noscript><p>Read the <a href="https://github.com/NamTheDev/docs/blob/main/pages/HOME.md">Markdown index on GitHub</a> if JavaScript is disabled.</p></noscript>
+      <footer class="border-top mt-5 py-3 fs-xs fg-3">
+        <a href="https://github.com/NamTheDev/docs/blob/main/LICENSE">MIT License</a>
+        · <a href="https://github.com/NamTheDev/docs/blob/main/AI_DISCLAIMER.md">AI disclosure</a>
+        · <a href="https://github.com/NamTheDev/util">util</a>
+      </footer>
+    </main>
+    <aside id="outline" class="overflow-auto min-h-0 min-w-0" aria-label="On this page">
+      <h2 class="border-bottom fw-semibold fg-body fs-xs mb-3 pb-2 lh-sm">Contents</h2>
+      <nav id="outline-links" class="d-flex flex-column" aria-label="Sections"></nav>
+    </aside>
+    <button id="sidebar-backdrop" class="position-absolute border-0" type="button" aria-label="Close navigation" hidden></button>
   </div>
 </body>
 </html>
