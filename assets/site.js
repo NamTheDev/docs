@@ -19,7 +19,7 @@
     sidebar.classList.toggle("drawer-open", drawerOpen);
     backdrop.hidden = !drawerOpen;
     menu.setAttribute("aria-expanded", String(drawerOpen));
-    if (drawerOpen) (nav.querySelector('[aria-current="page"]') || nav.querySelector("summary, a"))?.focus();
+    if (drawerOpen) (nav.querySelector('[aria-current="page"]') || nav.querySelector("a"))?.focus();
     else if (restoreFocus && mobile.matches) menu.focus();
   }
   menu.addEventListener("click",()=>setDrawer(!drawerOpen,true));
@@ -40,7 +40,7 @@
   mobile.addEventListener("change", updateLayout);
   updateLayout();
   const cache = new Map();
-  let groups = [], pages = [], current = "", version = 0;
+  let pages = [], current = "", version = 0;
   const element = (tag, classes, text) => {
     const node = document.createElement(tag);
     if (classes) node.className = classes;
@@ -55,21 +55,16 @@
   }
   function renderNav() {
     nav.replaceChildren();
-    for (const group of groups) {
-      const details = element("details", "pb-1");
-      details.open = group.pages.some(p => p.slug === current) || group.group === "Documentation";
-      details.append(element("summary", "fw-semibold text-break py-1 fg-2 fs-sm", group.group));
-      const list = element("ul", "list-unstyled m-0 ms-2 ps-2");
-      for (const page of group.pages) {
-        const item = element("li");
-        const active = page.slug === current;
-        const a = element("a", "page-link d-block text-decoration-none py-1 px-2 text-break fs-sm lh-sm fg-2"+(active?" fw-semibold":""), page.title);
-        a.href = pageUrl(page.slug);
-        if (active) a.setAttribute("aria-current", "page");
-        item.append(a); list.append(item);
-      }
-      details.append(list); nav.append(details);
+    for (const page of pages) {
+      const active = page.slug === current;
+      const a = element("a", "page-link d-block text-decoration-none py-2 px-2 text-break fs-sm lh-sm fg-2"+(active?" fw-semibold":""), page.title);
+      a.href = pageUrl(page.slug);
+      if (active) a.setAttribute("aria-current", "page");
+      nav.append(a);
     }
+  }
+  function resolvePage(slug) {
+    return pages.find(p => p.slug === slug) || pages.find(p => Object.hasOwn(p.aliases || {},slug));
   }
   function internalLinks(page) {
     const source = new URL(page.file, root);
@@ -119,7 +114,13 @@
     return cache.get(file);
   }
   async function load(slug, hash = "") {
-    const page = pages.find(p => p.slug === slug) || pages[0];
+    const page = resolvePage(slug) || pages[0];
+    const alias = page?.aliases?.[slug];
+    if (alias) {
+      // Preserve legacy page URLs by redirecting to the matching section.
+      hash = hash || "#"+alias;
+      history.replaceState({}, "", pageUrl(page.slug,hash));
+    }
     if (!page) return;
     const token = ++version; current = page.slug; renderNav();
     outlineLinks.replaceChildren(); mobileLinks.replaceChildren(); updateOutline();
@@ -129,9 +130,9 @@
       if (token !== version) return;
       article.innerHTML = DOMPurify.sanitize(marked.parse(source,{gfm:true}));
       formatArticle(); internalLinks(page);
-      document.title = page.title + " — " + groups.find(g => g.pages.includes(page)).group + " | NamTheDev docs";
+      document.title = page.title + " | NamTheDev docs";
       if (hash) {
-        try { document.getElementById(decodeURIComponent(hash.replace(/^#/,"")))?.scrollIntoView(); } catch {}
+        try { (document.getElementById(decodeURIComponent(hash.replace(/^#/,""))) || (alias && document.getElementById(alias)))?.scrollIntoView(); } catch {}
       } else {
         main.scrollTop = 0;
       }
@@ -150,7 +151,7 @@
     const a = event.target.closest("a[href]");
     if (!a || event.defaultPrevented || event.button!==0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || a.target) return;
     const url = new URL(a.href);
-    if (url.origin !== root.origin || url.pathname !== root.pathname || !url.searchParams.has("page") || !pages.some(p=>p.slug===url.searchParams.get("page"))) return;
+    if (url.origin !== root.origin || url.pathname !== root.pathname || !url.searchParams.has("page") || !resolvePage(url.searchParams.get("page"))) return;
     if (url.href===location.href) return;
     event.preventDefault(); history.pushState({}, "", url.href);
     if (mobile.matches) setDrawer(false);
@@ -158,7 +159,7 @@
   });
   addEventListener("popstate",route);
   fetch(new URL("manifest.json",root),{cache:"no-cache"}).then(r=>{if(!r.ok)throw Error("Manifest unavailable");return r.json()}).then(data=>{
-    groups = data; pages = groups.flatMap(g=>g.pages); route();
+    pages = data; route();
   }).catch(error=>{
     article.replaceChildren(element("p","fg-danger","Unable to load documentation index."));
     console.error(error);

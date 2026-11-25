@@ -1,147 +1,69 @@
 [
   {
-    "group": "Documentation",
-    "pages": [
-      {
-        "slug": "home",
-        "title": "Overview",
-        "file": "pages/HOME.md"
-      }
-    ]
+    "slug": "home",
+    "title": "Overview",
+    "file": "pages/HOME.md"
   },
   {
-    "group": "Profile",
-    "pages": [
-      {
-        "slug": "profile-readme",
-        "title": "Overview",
-        "file": "projects/profile/README.md"
-      },
-      {
-        "slug": "profile-usage",
-        "title": "Usage",
-        "file": "projects/profile/USAGE.md"
-      },
-      {
-        "slug": "profile-development",
-        "title": "Development and architecture",
-        "file": "projects/profile/DEVELOPMENT.md"
-      }
-    ]
+    "slug": "profile-readme",
+    "title": "Profile",
+    "file": "projects/profile/README.md",
+    "aliases": {
+      "profile-usage": "usage",
+      "profile-development": "architecture-and-development"
+    }
   },
   {
-    "group": "MeditorD",
-    "pages": [
-      {
-        "slug": "meditord-readme",
-        "title": "Overview",
-        "file": "projects/meditord/README.md"
-      },
-      {
-        "slug": "meditord-usage",
-        "title": "Usage",
-        "file": "projects/meditord/USAGE.md"
-      },
-      {
-        "slug": "meditord-development",
-        "title": "Architecture and development",
-        "file": "projects/meditord/DEVELOPMENT.md"
-      }
-    ]
+    "slug": "meditord-readme",
+    "title": "MeditorD",
+    "file": "projects/meditord/README.md",
+    "aliases": {
+      "meditord-usage": "usage",
+      "meditord-development": "architecture-and-development"
+    }
   },
   {
-    "group": "MCP-Server",
-    "pages": [
-      {
-        "slug": "mcp-server-readme",
-        "title": "Overview",
-        "file": "projects/mcp-server/README.md"
-      },
-      {
-        "slug": "mcp-server-usage",
-        "title": "Setup and usage",
-        "file": "projects/mcp-server/USAGE.md"
-      },
-      {
-        "slug": "mcp-server-development",
-        "title": "Architecture and development",
-        "file": "projects/mcp-server/DEVELOPMENT.md"
-      }
-    ]
+    "slug": "mcp-server-readme",
+    "title": "MCP-Server",
+    "file": "projects/mcp-server/README.md",
+    "aliases": {
+      "mcp-server-usage": "usage",
+      "mcp-server-development": "architecture-and-development"
+    }
   },
   {
-    "group": "keep",
-    "pages": [
-      {
-        "slug": "keep-readme",
-        "title": "Overview",
-        "file": "projects/keep/README.md"
-      },
-      {
-        "slug": "keep-usage",
-        "title": "User guide",
-        "file": "projects/keep/USAGE.md"
-      },
-      {
-        "slug": "keep-development",
-        "title": "Architecture and development",
-        "file": "projects/keep/DEVELOPMENT.md"
-      }
-    ]
+    "slug": "keep-readme",
+    "title": "keep",
+    "file": "projects/keep/README.md",
+    "aliases": {
+      "keep-usage": "usage",
+      "keep-development": "architecture-and-development"
+    }
   },
   {
-    "group": "clipboard",
-    "pages": [
-      {
-        "slug": "clipboard-readme",
-        "title": "Overview",
-        "file": "projects/clipboard/README.md"
-      },
-      {
-        "slug": "clipboard-usage",
-        "title": "User guide",
-        "file": "projects/clipboard/USAGE.md"
-      },
-      {
-        "slug": "clipboard-development",
-        "title": "Architecture and development",
-        "file": "projects/clipboard/DEVELOPMENT.md"
-      }
-    ]
+    "slug": "clipboard-readme",
+    "title": "clipboard",
+    "file": "projects/clipboard/README.md",
+    "aliases": {
+      "clipboard-usage": "usage",
+      "clipboard-development": "architecture-and-development"
+    }
   },
   {
-    "group": "util",
-    "pages": [
-      {
-        "slug": "util-readme",
-        "title": "Overview",
-        "file": "projects/util/README.md"
-      },
-      {
-        "slug": "util-design",
-        "title": "Design system",
-        "file": "projects/util/DESIGN.md"
-      },
-      {
-        "slug": "util-formatting",
-        "title": "Formatting and verification",
-        "file": "projects/util/FORMATTING.md"
-      }
-    ]
+    "slug": "util-readme",
+    "title": "util",
+    "file": "projects/util/README.md",
+    "aliases": {
+      "util-design": "design-system",
+      "util-formatting": "formatting-and-verification"
+    }
   },
   {
-    "group": "docs",
-    "pages": [
-      {
-        "slug": "docs-readme",
-        "title": "Overview",
-        "file": "projects/docs/README.md"
-      },
-      {
-        "slug": "docs-development",
-        "title": "Maintenance",
-        "file": "projects/docs/DEVELOPMENT.md"
-      }
-    ]
+    "slug": "docs-readme",
+    "title": "docs",
+    "file": "projects/docs/README.md",
+    "aliases": {
+      "docs-development": "editing"
+    }
   }
 ]

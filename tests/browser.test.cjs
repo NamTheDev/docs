@@ -31,7 +31,8 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     assert.match(favicon.headers()['content-type'],/image\/svg\+xml/);
     assert.match(await favicon.text(),/<svg\b/);
     await page.locator('#article h1').filter({hasText:'Documentation'}).waitFor();
-    assert.equal(await page.locator('#page-nav details').count(),8);
+    assert.equal(await page.locator('#page-nav > a').count(),8);
+    assert.equal(await page.locator('#page-nav details').count(),0);
     assert.equal(await page.locator('.brand-name').evaluate(e=>e.tagName),'SPAN');
     assert.equal(await page.locator('a.brand-name').count(),0);
     const ticker = page.locator('.header-links');
@@ -129,9 +130,14 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     await page.locator('#article').getByRole('link',{name:'keep',exact:true}).click();
     await page.locator('#article h1').filter({hasText:'keep'}).waitFor();
     assert.equal(new URL(page.url()).searchParams.get('page'),'keep-readme');
-    await page.locator('#article').getByRole('link',{name:'User guide',exact:true}).click();
-    await page.locator('#article h1').filter({hasText:'User guide'}).waitFor();
-    assert.equal(new URL(page.url()).searchParams.get('page'),'keep-usage');
+    for (const id of ['installation','usage','architecture-and-development','verification']) {
+      assert.equal(await page.locator('#article h2[id="'+id+'"]').count(),1);
+    }
+    await page.goto(url+'/?page=keep-usage');
+    await page.locator('#article h2#usage').waitFor();
+    assert.equal(new URL(page.url()).searchParams.get('page'),'keep-readme');
+    assert.equal(new URL(page.url()).hash,'#usage');
+    assert.equal(await page.locator('#page-nav [aria-current="page"]').innerText(),'keep');
     assert.equal(await page.locator('#theme-toggle').count(),0);
     await page.evaluate(()=>localStorage.setItem('namthedev-docs-theme','light'));
     await page.reload();
@@ -149,10 +155,9 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     await page.locator('#menu-toggle').click();
     await page.locator('#sidebar').waitFor({state:'visible'});
     assert.equal(await page.locator('#page-filter').count(),0);
-    const clipboard = page.locator('#page-nav details').filter({has:page.locator('summary').filter({hasText:/^clipboard$/i})});
-    await clipboard.locator('summary').click();
-    await clipboard.getByRole('link',{name:'Overview',exact:true}).click();
+    await page.locator('#page-nav').getByRole('link',{name:'clipboard',exact:true}).click();
     await page.locator('#article h1').filter({hasText:'clipboard'}).waitFor();
+    assert.equal(await page.locator('#article h3#http-api').count(),1);
     assert.equal(await page.locator('#sidebar').isVisible(),false);
     assert.equal(await fullscreen(),true);
     await page.locator('#menu-toggle').click();
