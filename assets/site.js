@@ -2,7 +2,6 @@
 (function () {
   const article = document.querySelector("#article");
   const nav = document.querySelector("#page-nav");
-  const filter = document.querySelector("#page-filter");
   const root = new URL("./", location.href);
   const mobile = matchMedia("(max-width: 760px)");
   const main = document.querySelector("#main-content");
@@ -20,7 +19,7 @@
     sidebar.classList.toggle("drawer-open", drawerOpen);
     backdrop.hidden = !drawerOpen;
     menu.setAttribute("aria-expanded", String(drawerOpen));
-    if (drawerOpen) filter.focus();
+    if (drawerOpen) (nav.querySelector('[aria-current="page"]') || nav.querySelector("summary, a"))?.focus();
     else if (restoreFocus && mobile.matches) menu.focus();
   }
   menu.addEventListener("click",()=>setDrawer(!drawerOpen,true));
@@ -55,16 +54,13 @@
     return url.href;
   }
   function renderNav() {
-    const query = filter.value.trim().toLowerCase();
     nav.replaceChildren();
     for (const group of groups) {
-      const matches = group.pages.filter(p => (group.group + " " + p.title).toLowerCase().includes(query));
-      if (!matches.length) continue;
       const details = element("details", "pb-1");
-      details.open = !!query || matches.some(p => p.slug === current) || group.group === "Documentation";
+      details.open = group.pages.some(p => p.slug === current) || group.group === "Documentation";
       details.append(element("summary", "fw-semibold text-break py-1 fg-2 fs-sm", group.group));
       const list = element("ul", "list-unstyled m-0 ms-2 ps-2");
-      for (const page of matches) {
+      for (const page of group.pages) {
         const item = element("li");
         const active = page.slug === current;
         const a = element("a", "page-link d-block text-decoration-none py-1 px-2 text-break fs-sm lh-sm fg-2"+(active?" fw-semibold":""), page.title);
@@ -74,7 +70,6 @@
       }
       details.append(list); nav.append(details);
     }
-    if (!nav.childElementCount) nav.append(element("p", "fg-3 fs-sm", "No matching pages."));
   }
   function internalLinks(page) {
     const source = new URL(page.file, root);
@@ -161,7 +156,6 @@
     if (mobile.matches) setDrawer(false);
     route();
   });
-  filter.addEventListener("input",renderNav);
   addEventListener("popstate",route);
   fetch(new URL("manifest.json",root),{cache:"no-cache"}).then(r=>{if(!r.ok)throw Error("Manifest unavailable");return r.json()}).then(data=>{
     groups = data; pages = groups.flatMap(g=>g.pages); route();

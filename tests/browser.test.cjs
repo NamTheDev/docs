@@ -148,9 +148,10 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     await page.locator('#menu-toggle').waitFor({state:'visible'});
     await page.locator('#menu-toggle').click();
     await page.locator('#sidebar').waitFor({state:'visible'});
-    await page.locator('#page-filter').fill('clipboard');
-    assert.equal(await page.locator('#page-nav details').count(),1);
-    await page.locator('#page-nav').getByRole('link',{name:'Overview',exact:true}).click();
+    assert.equal(await page.locator('#page-filter').count(),0);
+    const clipboard = page.locator('#page-nav details').filter({has:page.locator('summary').filter({hasText:/^clipboard$/i})});
+    await clipboard.locator('summary').click();
+    await clipboard.getByRole('link',{name:'Overview',exact:true}).click();
     await page.locator('#article h1').filter({hasText:'clipboard'}).waitFor();
     assert.equal(await page.locator('#sidebar').isVisible(),false);
     assert.equal(await fullscreen(),true);
