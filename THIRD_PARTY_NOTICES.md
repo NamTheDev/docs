@@ -35,3 +35,7 @@ The configuration targets Bootstrap's documented CSS variables. This repository 
 ## Vendored framework and Markdown libraries
 
 Bootstrap 6.0.0-alpha.2 is distributed with its original [LICENSE.bootstrap](LICENSE.bootstrap). Marked 15.0.12 ([MIT license](https://github.com/markedjs/marked/blob/v15.0.12/LICENSE.md)) and DOMPurify 3.2.6 ([license](https://github.com/cure53/DOMPurify/blob/3.2.6/LICENSE)) are loaded from jsDelivr. They retain their upstream terms. The Roboto font is loaded from Google Fonts; see [Roboto license](https://github.com/googlefonts/roboto/blob/main/LICENSE).
+
+## Lucide
+
+The favicon uses Lucide's `file-text` icon with a monochrome browser-theme-adaptive stroke. See [upstream source](https://github.com/lucide-icons/lucide/blob/main/icons/file-text.svg) and [license](assets/LICENSE.lucide).

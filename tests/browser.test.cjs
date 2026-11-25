@@ -6,7 +6,7 @@ const http = require('node:http');
 const { chromium } = require('playwright');
 
 test('documentation navigation, cross-links, responsive layout and fixed dark theme', async () => {
-  const mime = {'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.md':'text/plain'};
+  const mime = {'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.md':'text/plain','.svg':'image/svg+xml'};
   const server = http.createServer(async(req,res)=>{
     try {
       const pathname = new URL(req.url,'http://localhost').pathname;
@@ -25,6 +25,11 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     await page.route('https://fonts.googleapis.com/**',route=>route.abort());
     const url='http://127.0.0.1:'+server.address().port;
     await page.goto(url);
+    assert.equal(await page.locator('link[rel="icon"]').getAttribute('href'),'assets/favicon.svg');
+    const favicon = await page.request.get(url+'/assets/favicon.svg');
+    assert.equal(favicon.status(),200);
+    assert.match(favicon.headers()['content-type'],/image\/svg\+xml/);
+    assert.match(await favicon.text(),/<svg\b/);
     await page.locator('#article h1').filter({hasText:'Documentation'}).waitFor();
     assert.equal(await page.locator('#page-nav details').count(),8);
     const fullscreen = () => page.evaluate(()=>{
