@@ -20,7 +20,7 @@
   <a class="visually-hidden-focusable" href="#main-content">Skip to content</a>
   <header class="site-header bg-body border-bottom flex-shrink-0 mx-4 lg:mx-6">
     <div class="header-inner d-flex align-items-center w-100 gap-3">
-      <a href="?page=home" class="brand-name fw-semibold text-decoration-none fg-body flex-shrink-0">NAMTHEDEV / DOCS</a>
+      <a href="?page=home" class="brand-name fs-lg fw-semibold text-decoration-none fg-body flex-shrink-0">NAMTHEDEV / DOCS</a>
       <nav aria-label="External navigation" class="d-flex align-items-center gap-3 ms-auto fs-sm">
         <a href="https://github.com/NamTheDev/docs">GitHub</a>
         <a href="https://namthedev.github.io/profile/">Profile</a>
@@ -28,16 +28,14 @@
       <button id="menu-toggle" class="btn btn-outline theme-secondary rounded-5 btn-sm flex-shrink-0" type="button" aria-controls="sidebar" aria-expanded="false" hidden>Pages</button>
     </div>
   </header>
-  <div id="workspace" class="position-relative flex-grow-1 min-h-0 min-w-0 overflow-hidden w-100 px-4 lg:px-6 pt-4 pb-3">
+  <div id="workspace" class="d-grid gap-6 position-relative flex-grow-1 min-h-0 min-w-0 overflow-hidden w-100 px-4 lg:px-6 pt-4 pb-3">
     <aside id="sidebar" class="overflow-auto min-h-0 min-w-0" aria-label="Documentation navigation">
-      <div id="navigation">
-        <h2 class="border-bottom fw-semibold fg-body fs-xs mb-3 pb-2 lh-sm">Pages</h2>
+          <h2 class="border-bottom fw-semibold fg-body fs-xs mb-3 pb-2 lh-sm">Pages</h2>
         <label for="page-filter" class="visually-hidden">Filter documentation</label>
-        <input id="page-filter" type="search" class="form-control rounded-5 mb-3 w-100" placeholder="Filter pages" autocomplete="off">
+        <input id="page-filter" type="search" class="form-control rounded-5 mb-3 w-100 fs-sm" placeholder="Filter pages" autocomplete="off">
         <nav id="page-nav" class="d-flex flex-column" aria-label="Documentation pages"></nav>
-      </div>
     </aside>
-    <main id="main-content" class="overflow-auto min-w-0 min-h-0" tabindex="-1">
+    <main id="main-content" class="overflow-auto min-w-0 min-h-0 pe-2" tabindex="-1">
       <details id="mobile-toc" class="border-top border-bottom mb-3 py-2" hidden>
         <summary class="fs-sm fw-semibold">Contents</summary>
         <nav id="mobile-toc-links" class="mt-2" aria-label="Sections"></nav>
@@ -56,7 +54,7 @@
       <h2 class="border-bottom fw-semibold fg-body fs-xs mb-3 pb-2 lh-sm">Contents</h2>
       <nav id="outline-links" class="d-flex flex-column" aria-label="Sections"></nav>
     </aside>
-    <button id="sidebar-backdrop" class="position-absolute border-0" type="button" aria-label="Close navigation" hidden></button>
+    <button id="sidebar-backdrop" class="position-absolute border-0" tabindex="-1" type="button" aria-label="Close navigation" hidden></button>
   </div>
 </body>
 </html>

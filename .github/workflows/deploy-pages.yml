@@ -12,12 +12,17 @@ concurrency:
   group: pages
   cancel-in-progress: true
 jobs:
+  commit-format:
+    uses: ./.github/workflows/commit-message-format.yml
+  ai-disclosure:
+    uses: ./.github/workflows/ai-disclosure-format.yml
+  verify:
+    uses: ./.github/workflows/verify.yml
   build:
+    needs: [commit-format, ai-disclosure, verify]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - run: python3 tests/verify.py
-      - run: node --check assets/site.js
       - uses: actions/configure-pages@v5
       - name: Prepare static site
         run: |

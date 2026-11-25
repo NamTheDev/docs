@@ -8,13 +8,14 @@ See [AI_DISCLAIMER.md](AI_DISCLAIMER.md) for the full disclosure.
 
 ## Introduction
 
-Centralized documentation for NamTheDev projects, including user guides, technical references, and development information. The website renders the Markdown files maintained in this repository.
+Centralized [documentation](https://namthedev.github.io/docs/) for NamTheDev projects.
 
 ## Resources
 
 - [Documentation index](pages/HOME.md)
 - [Project source repositories](https://github.com/NamTheDev)
-- [Shared design and contribution standards](https://github.com/NamTheDev/util)
+- [Design principles](https://github.com/NamTheDev/util/blob/main/design/DESIGN_PRINCIPLES.md)
+- [Formatting standards](https://github.com/NamTheDev/util/tree/main/formatting)
 - [Website maintenance](projects/docs/DEVELOPMENT.md)
 
 ## License

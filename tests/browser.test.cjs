@@ -59,11 +59,12 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     assert.ok(await page.locator('#outline-links a').count()>0);
     await page.setViewportSize({width:390,height:844});
     assert.equal(await fullscreen(),true);
-    assert.equal(await page.locator('#sidebar').isVisible(),false);
-    assert.equal(await page.locator('#outline').isVisible(),false);
-    assert.equal(await page.locator('#mobile-toc').isVisible(),true);
+    await page.locator('#sidebar').waitFor({state:'hidden'});
+    await page.locator('#outline').waitFor({state:'hidden'});
+    await page.locator('#mobile-toc').waitFor({state:'visible'});
+    await page.locator('#menu-toggle').waitFor({state:'visible'});
     await page.locator('#menu-toggle').click();
-    assert.equal(await page.locator('#sidebar').isVisible(),true);
+    await page.locator('#sidebar').waitFor({state:'visible'});
     await page.locator('#page-filter').fill('clipboard');
     assert.equal(await page.locator('#page-nav details').count(),1);
     await page.locator('#page-nav').getByRole('link',{name:'Overview',exact:true}).click();

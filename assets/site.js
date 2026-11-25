@@ -17,7 +17,7 @@
   let drawerOpen = false;
   function setDrawer(open, restoreFocus = false) {
     drawerOpen = mobile.matches && open;
-    sidebar.hidden = mobile.matches && !drawerOpen;
+    sidebar.classList.toggle("drawer-open", drawerOpen);
     backdrop.hidden = !drawerOpen;
     menu.setAttribute("aria-expanded", String(drawerOpen));
     if (drawerOpen) filter.focus();
@@ -29,7 +29,7 @@
   function updateOutline() {
     const hasSections = outlineLinks.childElementCount > 0;
     outline.hidden = !wide.matches;
-    outline.style.visibility = hasSections ? "" : "hidden";
+    outline.classList.toggle("invisible", !hasSections);
     mobileToc.hidden = wide.matches || !hasSections;
   }
   wide.addEventListener("change", updateOutline);
@@ -67,7 +67,7 @@
       for (const page of matches) {
         const item = element("li");
         const active = page.slug === current;
-        const a = element("a", "page-link d-block text-decoration-none py-1 px-2 text-break", page.title);
+        const a = element("a", "page-link d-block text-decoration-none py-1 px-2 text-break fs-sm lh-sm fg-2"+(active?" fw-semibold":""), page.title);
         a.href = pageUrl(page.slug);
         if (active) a.setAttribute("aria-current", "page");
         item.append(a); list.append(item);
@@ -88,14 +88,16 @@
     }
   }
   function formatArticle() {
-    const used = new Set(["main-content","article","navigation","page-nav","page-filter","outline","mobile-toc","breadcrumbs","reading-column","outline-links","mobile-toc-links"]);
+    const used = new Set(Array.from(document.querySelectorAll("[id]")).filter(node=>!article.contains(node)||node===article).map(node=>node.id));
     const headings = Array.from(article.querySelectorAll("h2,h3,h4,h5,h6"));
     for (const heading of article.querySelectorAll("h1,h2,h3,h4,h5,h6")) {
       const base = heading.textContent.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu,"").replace(/\s+/g,"-") || "section";
       let id = base, i = 2; while (used.has(id)) id = base + "-" + i++;
       used.add(id); heading.id = id;
-      heading.classList.add("text-break");
+      heading.classList.add("text-break","fw-semibold","lh-sm");
+      if (heading.tagName === "H1" || heading.tagName === "H2") heading.classList.add("border-bottom","pb-2");
     }
+    for (const p of article.querySelectorAll("p")) p.classList.add("mb-4");
     for (const table of article.querySelectorAll("table")) {
       table.classList.add("table","table-bordered","fs-sm","align-middle");
       const wrapper = element("div","overflow-auto my-3");
