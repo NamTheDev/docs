@@ -31,14 +31,14 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     assert.match(favicon.headers()['content-type'],/image\/svg\+xml/);
     assert.match(await favicon.text(),/<svg\b/);
     await page.locator('#article h1').filter({hasText:'Documentation'}).waitFor();
-    assert.equal(await page.locator('#page-nav > a').count(),8);
+    assert.equal(await page.locator('#page-nav > a').count(),7);
     assert.equal(await page.locator('#page-nav details').count(),0);
     assert.equal(await page.locator('.brand-name').evaluate(e=>e.tagName),'SPAN');
     assert.equal(await page.locator('a.brand-name').count(),0);
     assert.equal(await page.locator('.marquee-toggle').count(),0);
     const ticker = page.locator('.header-links');
     const original = ticker.locator('.marquee-group:not([aria-hidden])');
-    assert.equal(await original.locator('a').count(),11);
+    assert.equal(await original.locator('a').count(),10);
     // Check spacing, clipping and sustained movement at the reported wide viewport,
     // plus a viewport larger than one complete set of links.
     for (const width of [1440, 1920, 2560, 900, 390]) {
@@ -108,7 +108,7 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     await ticker.hover();
     await page.mouse.wheel(-Math.round(cycle*2+70),0);
     await page.waitForFunction(({x,w})=>Math.abs(document.querySelector('.header-links').scrollLeft-x)>10,{x:still,w:cycle});
-    assert.equal(await original.locator('a').count(),11);
+    assert.equal(await original.locator('a').count(),10);
     assert.equal(await ticker.locator('.marquee-group[aria-hidden="true"] a:not([tabindex="-1"])').count(),0);
     await page.mouse.move(0,899);
     await page.emulateMedia({reducedMotion:'no-preference'});
