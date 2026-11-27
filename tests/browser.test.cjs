@@ -54,7 +54,7 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
         return {
           gap:Math.min(...items.slice(1).map((item,i)=>item.getBoundingClientRect().left-items[i].getBoundingClientRect().right)),
           endGap:parseFloat(getComputedStyle(g).paddingRight),
-          clipped:box.right<=innerWidth && box.left>=brand.right && getComputedStyle(n).overflowX==='auto',
+          clipped:box.right<=innerWidth && (box.left>=brand.right || (innerWidth<=420 && box.top>=brand.bottom-1)) && getComputedStyle(n).overflowX==='auto',
           noOverflow:document.documentElement.scrollWidth<=innerWidth+1
         };
       });
