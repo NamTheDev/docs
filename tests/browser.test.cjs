@@ -35,6 +35,7 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     assert.equal(await page.locator('#page-nav details').count(),0);
     assert.equal(await page.locator('.brand-name').evaluate(e=>e.tagName),'SPAN');
     assert.equal(await page.locator('a.brand-name').count(),0);
+    assert.equal(await page.locator('.marquee-toggle').count(),0);
     const ticker = page.locator('.header-links');
     const original = ticker.locator('.marquee-group:not([aria-hidden])');
     assert.equal(await original.locator('a').count(),11);
