@@ -5,7 +5,7 @@ import re
 
 root = Path(__file__).resolve().parents[1]
 pages = json.loads((root / "manifest.json").read_text())
-assert len(pages) == 8
+assert len(pages) == 7
 slugs = {p["slug"] for p in pages}
 aliases = [alias for p in pages for alias in p.get("aliases", {})]
 assert len(set(aliases)) == len(aliases) and not slugs.intersection(aliases)

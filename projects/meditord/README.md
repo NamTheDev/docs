@@ -1,6 +1,6 @@
 # MeditorD
 
-A self-hosted Markdown editor and folder-based media archive. The Bun/TypeScript server persists documents, folders and media in SQLite. The interface retains its own design system and is exempt from util's Bootstrap-first visual requirements.
+A self-hosted Markdown editor and folder-based media archive. The Bun/TypeScript server persists documents, folders and media in SQLite. The interface retains its own design system .
 
 [Repository](https://github.com/NamTheDev/MeditorD) · [Design resources](https://github.com/NamTheDev/MeditorD/blob/main/RESOURCES.md)
 

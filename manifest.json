@@ -50,15 +50,6 @@
     }
   },
   {
-    "slug": "util-readme",
-    "title": "util",
-    "file": "projects/util/README.md",
-    "aliases": {
-      "util-design": "design-system",
-      "util-formatting": "formatting-and-verification"
-    }
-  },
-  {
     "slug": "docs-readme",
     "title": "docs",
     "file": "projects/docs/README.md",

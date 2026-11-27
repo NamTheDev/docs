@@ -14,8 +14,6 @@ Centralized [documentation](https://namthedev.github.io/docs/) for NamTheDev pro
 
 - [Documentation index](pages/HOME.md)
 - [Project source repositories](https://github.com/NamTheDev)
-- [Design principles](https://github.com/NamTheDev/util/blob/main/design/DESIGN_PRINCIPLES.md)
-- [Formatting standards](https://github.com/NamTheDev/util/tree/main/formatting)
 - [Website maintenance](projects/docs/README.md)
 
 ## License

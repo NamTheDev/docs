@@ -68,7 +68,7 @@ python3 scripts/sync_catalogue.py
 
 Review the resulting catalogue changes before committing.
 
-The stylesheet order is Bootstrap, the identical util configuration, then local CSS. Profile intentionally retains Source Sans 3, colored headings, blue links and its reading layout. The service worker caches local assets under a versioned key; external fonts and Markdown libraries may still require network access. Increment the cache version when changing precached assets.
+The stylesheet order is Bootstrap, the local design configuration, then local CSS. Profile intentionally retains Source Sans 3, colored headings, blue links and its reading layout. The service worker caches local assets under a versioned key; external fonts and Markdown libraries may still require network access. Increment the cache version when changing precached assets.
 
 ## Verification
 

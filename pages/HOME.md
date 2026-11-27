@@ -9,7 +9,6 @@ One guide per active NamTheDev repository: overview, installation, usage, archit
 | [MCP-Server](../projects/mcp-server/README.md) | HTTP tools for AI assistants |
 | [keep](../projects/keep/README.md) | Local-first notes and checklists |
 | [clipboard](../projects/clipboard/README.md) | Temporary shared text vaults |
-| [util](../projects/util/README.md) | Shared design and contribution standards |
 | [docs](../projects/docs/README.md) | Central documentation website |
 
 Each guide links to the relevant source files on the main branch. The original repositories remain authoritative. Archived projects are excluded.

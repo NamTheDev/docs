@@ -14,7 +14,7 @@ cd docs
 python3 -m http.server 8000
 ```
 
-Open http://localhost:8000. Markdown and the manifest are fetched over HTTP. Marked and DOMPurify are version-pinned CDN dependencies; the Bootstrap distribution and util config are locally vendored.
+Open http://localhost:8000. Markdown and the manifest are fetched over HTTP. Marked and DOMPurify are version-pinned CDN dependencies; the Bootstrap distribution and design configuration are locally vendored.
 
 ## Usage
 
@@ -52,14 +52,14 @@ Verify commands, configuration names and examples against source files. State li
 | `manifest.json` | Flat page index and legacy aliases |
 | `assets/site.js` | Routing, navigation, Markdown rendering and Contents |
 | `assets/marquee.js` | Native-scroll ticker |
-| `assets/config.css` | Canonical util configuration |
+| `assets/config.css` | Local design configuration |
 | `assets/docs.css` | Reading identity and fullscreen geometry |
 | `projects/`, `pages/` | Markdown documentation |
 | `tests/` | Manifest/link and browser verification |
 
 The renderer parses Markdown with Marked and sanitizes HTML with DOMPurify. Relative Markdown links are translated to query-based page URLs. Heading IDs are generated from heading text. The article and navigation panes scroll independently inside a full-viewport shell; the document body does not scroll. Below 1181px the Contents rail becomes inline, and at 760px and below the page rail becomes a drawer.
 
-Use Bootstrap utilities and [util standards](../util/README.md). Keep Source Sans 3, colored headings and blue links as intentional reading-identity exceptions. Do not reintroduce a maximum-width article or a light-mode switch.
+Use Bootstrap utilities and maintain the local design configuration. Keep Source Sans 3, colored headings and blue links as intentional reading-identity exceptions. Do not reintroduce a maximum-width article or a light-mode switch.
 
 ## Verification and publishing
 

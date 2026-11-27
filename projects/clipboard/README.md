@@ -101,7 +101,7 @@ npm run check
 npm test
 ```
 
-CI also runs Chromium UI verification and Pages smoke tests. Verify API availability, the configured origin and browser clipboard permission when troubleshooting. Preserve preferences and ownership semantics when changing the client. Follow [util](../util/README.md) for shared design standards.
+CI also runs Chromium UI verification and Pages smoke tests. Verify API availability, the configured origin and browser clipboard permission when troubleshooting. Preserve preferences and ownership semantics when changing the client. Maintain the local design configuration.
 
 ## Source references
 

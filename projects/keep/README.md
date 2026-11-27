@@ -72,13 +72,13 @@ If an item appears missing, inspect the current view, search, labels, Archive, R
 | `src/features/notes/` | Selectors, cards and JSON backup helper |
 | `src/ui/` | Shell, icons and composer |
 | `src/utils/format.ts` | Formatting and escaping |
-| `src/config.css` | Identical util design configuration |
+| `src/config.css` | Local design configuration |
 | `scripts/build.ts` | Browser bundle and static assets |
 | `server.ts` | Bun development/production file server |
 
 A note has an ID, title, body, checklist flag, items, color, pinned/archived/trashed flags, labels, optional reminder, and timestamps. Checklist items have ID, text and checked fields. Normalization limits incoming checklist items to 200, body text to 100000 characters and note labels to 30 entries. Loading caps stored notes at 5000 and global labels at 200. These are source normalization limits, not guaranteed browser storage capacity.
 
-The build bundles src/main.ts into dist/app.js with Bun, copies styles and the theme signal, generates a Lucide SVG favicon, and fingerprints CSS and JavaScript references. The UI uses Material Symbols Rounded and Bootstrap 6; follow [util](../util/README.md) when changing shared tokens.
+The build bundles src/main.ts into dist/app.js with Bun, copies styles and the theme signal, generates a Lucide SVG favicon, and fingerprints CSS and JavaScript references. The UI uses Material Symbols Rounded and Bootstrap 6; maintain the local design tokens when changing the interface.
 
 ## Verification
 
