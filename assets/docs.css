@@ -6,17 +6,15 @@
   --bs-border-color: var(--surface-0);
 }
 
-#workspace > aside, #main-content {overscroll-behavior:contain;}
 #main-content {scrollbar-gutter:stable;}
 .page-link {border-left:2px solid transparent; }
 .page-link:hover, .page-link:focus-visible, .page-link[aria-current="page"] {background:var(--mantle); color:var(--text); text-decoration:none;}
 .page-link[aria-current="page"] {border-left-color:var(--accent);}
 a:hover, a:focus-visible {text-decoration:underline;}
 .article :is(h1,h2,h3,h4,h5,h6) {scroll-margin-top:.75rem;}
-.article h1 {margin:0 0 1.25rem;  font-size:2rem; letter-spacing:-.025em;}
-.article h2 {margin:2.25rem 0 .75rem;  font-size:1.5rem;}
-.article h3 {margin:1.75rem 0 .5rem; font-size:1.25rem;}
-.article h4 {font-size:1.0625rem;}
+.article h1 {margin:0 0 1.25rem;}
+.article h2 {margin:2.25rem 0 .75rem;}
+.article h3 {margin:1.75rem 0 .5rem;}
 .article code {padding:.05em .22em; border:1px solid var(--surface-0); background:var(--mantle); color:inherit; font-size:.875rem;}
 .article pre code {padding:0; border:0; background:transparent; white-space:pre;}
 .article .table {--bs-table-cell-padding-y:.45rem; --bs-table-cell-padding-x:.55rem; --bs-table-border-color:var(--surface-1);}
