@@ -24,6 +24,7 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
     await page.route('https://cdn.jsdelivr.net/**',route=>route.fulfill({path:route.request().url().includes('/marked@')?'node_modules/marked/lib/marked.umd.js':'node_modules/dompurify/dist/purify.min.js',contentType:'application/javascript'}));
     await page.route('https://fonts.googleapis.com/**',route=>route.abort());
     const url='http://127.0.0.1:'+server.address().port;
+    await page.emulateMedia({reducedMotion:"no-preference"});
     await page.goto(url);
     assert.equal(await page.locator('link[rel="icon"]').getAttribute('href'),'assets/favicon.svg');
     const favicon = await page.request.get(url+'/assets/favicon.svg');
@@ -61,11 +62,13 @@ test('documentation navigation, cross-links, responsive layout and fixed dark th
       });
       assert.ok(geometry.gap>=8 && geometry.endGap>=8,JSON.stringify(geometry));
       assert.ok(geometry.clipped && geometry.noOverflow,JSON.stringify(geometry));
-      const before=await ticker.evaluate(n=>({x:n.scrollLeft,cycle:n.querySelector('.marquee-group:not([aria-hidden])').getBoundingClientRect().width}));
-      await page.waitForFunction(({x,cycle})=>{
-        const n=document.querySelector('.header-links');
-        return (n.scrollLeft-x+cycle)%cycle>=18;
-      },before,{timeout:4000});
+      for (let sample=0; sample<2; sample++) {
+        const before=await ticker.evaluate(n=>({x:n.scrollLeft,cycle:n.querySelector('.marquee-group:not([aria-hidden])').getBoundingClientRect().width}));
+        await page.waitForFunction(({x,cycle})=>{
+          const n=document.querySelector('.header-links'), delta=((n.scrollLeft-x)%cycle+cycle)%cycle;
+          return delta>=18 && delta<120;
+        },before,{timeout:4000});
+      }
     }
     await page.setViewportSize({width:1440,height:900});
     // Hover pauses auto-scroll, but wheel input still wraps both ways.
